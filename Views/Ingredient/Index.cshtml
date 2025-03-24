@@ -1,0 +1,91 @@
+@model IEnumerable<Ingredient>
+@{
+    ViewData["Title"] = "المكونات";
+}
+
+<div class="container-fluid py-4">
+    <div class="card shadow-lg">
+        <div class="card-header bg-danger">
+            <div class="row align-items-center">
+                <div class="col-8">
+                    <h3 class="text-white mb-0"><i class="bi bi-box-seam me-2"></i>@ViewData["Title"]</h3>
+                </div>
+                <div class="col-4 text-end">
+                    <a asp-action="Create" class="btn btn-light btn-sm">
+                        <i class="bi bi-plus-circle me-2"></i>إضافة جديد
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-header bg-gray-100 border-bottom">
+            <div class="row justify-content-between align-items-center g-3">
+                <div class="col-md-8">
+                    <input type="text" id="searchInput" class="form-control" placeholder="ابحث بالمكون...">
+                </div>
+                <div class="col-md-4 text-end">
+                    <div class="badge bg-danger rounded-pill">
+                        العدد: <span id="resultCount">@Model.Count()</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body px-0 pt-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-items-center mb-0">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="text-uppercase text-danger text-xs">الاسم</th>
+                            <th class="text-uppercase text-danger text-xs text-end">الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="dataTable">
+                        @foreach (var item in Model)
+                        {
+                            <tr class="hover-scale">
+                                <td class="ps-4">
+                                    <div class="d-flex align-items-center">
+                                        <div class="me-3">
+                                            <span class="badge bg-danger">@item.ExtraPrice.ToString("C")</span>
+                                        </div>
+                                        <p class="text-dark font-weight-bold mb-0">@item.Name</p>
+                                    </div>
+                                </td>
+                                <td class="pe-4 text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.IngredientId" 
+                                           class="btn btn-outline-danger btn-sm me-2">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.IngredientId" 
+                                           class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const dataTable = document.getElementById('dataTable');
+        
+        searchInput.addEventListener('input', function(e) {
+            const searchValue = e.target.value.toLowerCase();
+            Array.from(dataTable.getElementsByTagName('tr')).forEach(row => {
+                const name = row.querySelector('p').textContent.toLowerCase();
+                row.style.display = name.includes(searchValue) ? '' : 'none';
+            });
+        });
+    });
+</script>
+}

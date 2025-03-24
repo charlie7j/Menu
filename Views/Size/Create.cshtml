@@ -4,12 +4,11 @@
 }
 
 <div class="container">
-    <div class="glass-card">
+    <div class="glass-card border border-1">
         <!-- الهيدر -->
-        <div class="card-header gradient-header">
+        <div class="card-header gradient-header bg-danger">
             <div class="header-content">
-                <i class="bi bi-plus-circle-fill icon-large"></i>
-                <h1 class="page-title">إضافة حجم جديد</h1>
+                <h1 class="page-title ">إضافة حجم جديد</h1>
             </div>
             <a asp-action="Index" class="back-link">
                 <i class="bi bi-arrow-left-circle"></i> العودة للقائمة
@@ -19,17 +18,17 @@
         <!-- محتوى النموذج -->
         <form asp-action="Create" class="dashboard-form">
             <!-- حقل الاسم -->
-            <div class="form-floating floating-material">
-                <input asp-for="Name" class="form-control material-input" 
+            <div class="form-floating">
+                <input asp-for="Name" class="form-control" 
                        placeholder=" " required>
-                <label asp-for="Name" class="material-label"></label>
+                <label asp-for="Name" class="form-label"></label>
                 <span asp-validation-for="Name" class="error-message"></span>
                 <div class="input-highlight"></div>
             </div>
 
             <!-- زر الإرسال -->
             <div class="form-actions">
-                <button type="submit" class="btn-submit">
+                <button type="submit" class="btn btn-danger">
                     <i class="bi bi-check-circle-fill"></i> إضافة الحجم
                 </button>
             </div>
@@ -39,11 +38,7 @@
 
  
 <style>
-    :root {
-        --primary-color: #6200ee;
-        --primary-light: #9e47ff;
-        --error-color: #b00020;
-    }
+ 
 
     .dashboard-container {
         background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
@@ -52,17 +47,12 @@
     }
 
     .glass-card {
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        border-radius: 16px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         max-width: 800px;
         margin: 0 auto;
     }
 
     .gradient-header {
-        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
         color: white;
         padding: 1.5rem;
         display: flex;

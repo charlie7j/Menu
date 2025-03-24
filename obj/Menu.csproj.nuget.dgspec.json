@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "/home/charlie/Charlie_File/DOTNET/Menu/Menu.csproj": {}
+    "/workspaces/Menu/Menu.csproj": {}
   },
   "projects": {
-    "/home/charlie/Charlie_File/DOTNET/Menu/Menu.csproj": {
+    "/workspaces/Menu/Menu.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/charlie/Charlie_File/DOTNET/Menu/Menu.csproj",
+        "projectUniqueName": "/workspaces/Menu/Menu.csproj",
         "projectName": "Menu",
-        "projectPath": "/home/charlie/Charlie_File/DOTNET/Menu/Menu.csproj",
-        "packagesPath": "/home/charlie/.nuget/packages/",
-        "outputPath": "/home/charlie/Charlie_File/DOTNET/Menu/obj/",
+        "projectPath": "/workspaces/Menu/Menu.csproj",
+        "packagesPath": "/home/codespace/.nuget/packages/",
+        "outputPath": "/workspaces/Menu/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "/home/charlie/.nuget/NuGet/NuGet.Config"
+          "/home/codespace/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net6.0"
@@ -32,6 +32,11 @@
           "warnAsError": [
             "NU1605"
           ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -73,10 +78,25 @@
             "net47",
             "net471",
             "net472",
-            "net48"
+            "net48",
+            "net481"
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.AspNetCore.App.Ref",
+              "version": "[6.0.36, 6.0.36]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Host.linux-x64",
+              "version": "[6.0.36, 6.0.36]"
+            },
+            {
+              "name": "Microsoft.NETCore.App.Ref",
+              "version": "[6.0.36, 6.0.36]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -85,7 +105,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/6.0.136/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/8.0.407/RuntimeIdentifierGraph.json"
         }
       }
     }

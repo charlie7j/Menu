@@ -32,28 +32,7 @@ namespace Menu.Controllers
             return View(sizes);
         }
 
-        // عرض تفاصيل حجم معين
-        [HttpGet("Details/{id}")]
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            if (_context.Size == null)
-            {
-                return NotFound();
-            }
-            var size = _context.Size != null ? await _context.Size.FirstOrDefaultAsync(m => m.SizeId == id) : null;
-            if (size == null)
-            {
-                return NotFound();
-            }
-
-            return View(size);
-        }
-
+        
         // عرض نموذج إضافة حجم جديد
         [HttpGet("Create")]
         public IActionResult Create()
@@ -78,7 +57,7 @@ namespace Menu.Controllers
 
         // عرض نموذج تعديل حجم معين
         [HttpGet("Edit/{id}")]
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
@@ -89,18 +68,19 @@ namespace Menu.Controllers
             {
                 return NotFound();
             }
-            var size = _context.Size != null ? await _context.Size.FindAsync(id) : null;
-            if (size == null)
+            else
             {
-                return NotFound();
+                var size = _context.Size.Find(id);
+
+                return View(size);
             }
-            return View(size);
+
         }
 
         // تعديل حجم معين
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Name")] Size size)
+        public IActionResult Edit(int id, [Bind("SizeId,Name")] Size size)
         {
             if (id != size.SizeId)
             {
@@ -112,7 +92,7 @@ namespace Menu.Controllers
                 try
                 {
                     _context.Update(size);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -132,14 +112,14 @@ namespace Menu.Controllers
 
         // عرض نموذج تأكيد الحذف
         [HttpGet("Delete/{id}")]
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var size = _context.Size != null ? await _context.Size.FirstOrDefaultAsync(m => m.SizeId == id) : null;
+            var size = _context.Size != null ?  _context.Size.FirstOrDefault(m => m.SizeId == id) : null;
             if (size == null)
             {
                 return NotFound();
@@ -149,20 +129,20 @@ namespace Menu.Controllers
         }
 
         // حذف حجم معين
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var size = _context.Size != null ? await _context.Size.FindAsync(id) : null;
+            var size = _context.Size != null ?  _context.Size.Find(id) : null;
             if (size != null)
             {
                 if (size != null)
                 {
                     _context!.Size!.Remove(size);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
             }
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         // التحقق من وجود حجم معين

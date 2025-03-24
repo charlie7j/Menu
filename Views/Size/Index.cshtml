@@ -1,35 +1,143 @@
-
 @model IEnumerable<Size>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "قائمة الأحجام";
 }
 
+<div class="container-fluid py-4">
+    <div class="card">
+        <div class="card-header bg-danger">
+            <div class="row align-items-center">
+                <div class="col-8">
+                    <h3 class="text-white mb-0">@ViewData["Title"]</h3>
+                </div>
+                <div class="col-4 text-end">
+                    <a class="btn btn-light btn-sm" asp-action="Create">
+                        <i class="bi bi-plus-circle me-2"></i>إضافة جديد
+                    </a>
+                </div>
+            </div>
+        </div>
+
+     <!-- منطقة البحث المعدلة -->
+    <div class="card-header bg-gray-100 border-bottom">
+        <div class="row justify-content-between align-items-center">
+            <div class="col-md-6">
+                
+                    <input type="text" 
+                           id="searchInput"
+                           class="form-control" 
+                           placeholder="ابحث باسم الحجم..."
+                           aria-label="بحث">
+                
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="form-text text-muted">
+                    العدد الكلي: <span id="totalCount">@Model.Count()</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card-body px-0 pt-0">
+        <div class="table-responsive">
+            <table class="table align-items-center mb-0">
+                <thead class="bg-gray-100">
+                    <th class="text-uppercase text-secondary text-xs font-weight-bolder">اسم الحجم</th>
+                    <th class="text-uppercase text-secondary text-xs font-weight-bolder text-end">الإجراءات</th>
+                </thead>
+                <tbody id="dataTable">
+                    @foreach (var item in Model)
+                    {
+                        <tr class="hover-scale">
+                            <td class="ps-4">
+                                <p class="text-dark font-weight-bold mb-0">@item.Name</p>
+                            </td>
+                            <td class="pe-4 text-end">
+                                    <div class="btn-group">
+                                        <a asp-action="Edit" asp-route-id="@item.SizeId" 
+                                           class="btn btn-outline-danger btn-sm me-2">
+                                            <i class="bi bi-pencil-square"></i> تعديل
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.SizeId" 
+                                           class="btn btn-danger btn-sm">
+                                            <i class="bi bi-trash"></i> حذف
+                                        </a>
+                                    </div>
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+ 
 
 
-<h1>الأحجام</h1>
 
-<p>
-    <a asp-action="Create">إضافة حجم جديد</a>
-</p>
+    
+    </div>
+</div>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>الاسم</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr>
-                <td>@item.Name</td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.SizeId">تعديل</a> |
-                    <a asp-action="Details" asp-route-id="@item.SizeId">تفاصيل</a> |
-                    <a asp-action="Delete" asp-route-id="@item.SizeId">حذف</a>
-                </td>
-            </tr>
+ 
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.getElementById('searchInput');
+        const dataTable = document.getElementById('dataTable');
+        const totalCount = document.getElementById('totalCount');
+        const originalRows = Array.from(dataTable.getElementsByTagName('tr'));
+        
+        // احتفظ بنسخة من البيانات الأصلية
+        let currentData = originalRows.map(row => ({
+            element: row,
+            name: row.querySelector('td:first-child p').textContent.toLowerCase()
+        }));
+
+        // تحديث العداد
+        function updateCounter(visibleCount) {
+            totalCount.textContent = visibleCount;
         }
-    </tbody>
-</table>
+
+        // وظيفة البحث
+        function performSearch(searchTerm) {
+            const searchValue = searchTerm.toLowerCase().trim();
+            let visibleCount = 0;
+
+            currentData.forEach(item => {
+                const isVisible = item.name.includes(searchValue);
+                item.element.style.display = isVisible ? '' : 'none';
+                if (isVisible) visibleCount++;
+            });
+
+            updateCounter(visibleCount);
+        }
+
+        // تفاعل أثناء الكتابة
+        searchInput.addEventListener('input', function(e) {
+            performSearch(e.target.value);
+        });
+
+        // إعادة تعيين البحث عند النقر على أيقونة البحث
+        document.querySelector('.btn-danger').addEventListener('click', function() {
+            searchInput.value = '';
+            performSearch('');
+        });
+    });
+</script>
+
+<style>
+    tr {
+        transition: all 0.3s ease;
+    }
+    
+    tr[style*="none"] {
+        opacity: 0;
+        transform: translateX(-50px);
+        pointer-events: none;
+    }
+        .search-form {
+        position: relative;
+    }
+
+    
+</style>
