@@ -1,0 +1,215 @@
+@model Size
+@{
+    ViewData["Title"] = "إضافة حجم - لوحة التحكم";
+}
+
+<div class="container">
+    <div class="glass-card">
+        <!-- الهيدر -->
+        <div class="card-header gradient-header">
+            <div class="header-content">
+                <i class="bi bi-plus-circle-fill icon-large"></i>
+                <h1 class="page-title">إضافة حجم جديد</h1>
+            </div>
+            <a asp-action="Index" class="back-link">
+                <i class="bi bi-arrow-left-circle"></i> العودة للقائمة
+            </a>
+        </div>
+
+        <!-- محتوى النموذج -->
+        <form asp-action="Create" class="dashboard-form">
+            <!-- حقل الاسم -->
+            <div class="form-floating floating-material">
+                <input asp-for="Name" class="form-control material-input" 
+                       placeholder=" " required>
+                <label asp-for="Name" class="material-label"></label>
+                <span asp-validation-for="Name" class="error-message"></span>
+                <div class="input-highlight"></div>
+            </div>
+
+            <!-- زر الإرسال -->
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">
+                    <i class="bi bi-check-circle-fill"></i> إضافة الحجم
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+ 
+<style>
+    :root {
+        --primary-color: #6200ee;
+        --primary-light: #9e47ff;
+        --error-color: #b00020;
+    }
+
+    .dashboard-container {
+        background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+        min-height: 100vh;
+        padding: 2rem;
+    }
+
+    .glass-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(10px);
+        border-radius: 16px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .gradient-header {
+        background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+        color: white;
+        padding: 1.5rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .icon-large {
+        font-size: 2rem;
+    }
+
+    .page-title {
+        margin: 0;
+        font-weight: 600;
+        font-size: 1.8rem;
+    }
+
+    .back-link {
+        color: white;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: opacity 0.3s;
+    }
+
+    .back-link:hover {
+        opacity: 0.9;
+    }
+
+    .dashboard-form {
+        padding: 2rem;
+    }
+
+    .floating-material {
+        position: relative;
+        margin-bottom: 2rem;
+    }
+
+    .material-input {
+        border: none;
+        border-bottom: 1px solid #ced4da;
+        border-radius: 0;
+        padding-left: 0;
+        background: transparent;
+        box-shadow: none !important;
+    }
+
+    .material-input:focus {
+        border-color: var(--primary-color);
+    }
+
+    .material-label {
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #6c757d;
+        transition: all 0.3s;
+        pointer-events: none;
+    }
+
+    .material-input:focus + .material-label,
+    .material-input:not(:placeholder-shown) + .material-label {
+        top: -1.2rem;
+        left: 0;
+        font-size: 0.8rem;
+        color: var(--primary-color);
+    }
+
+    .input-highlight {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 2px;
+        width: 0;
+        background-color: var(--primary-color);
+        transition: width 0.3s;
+    }
+
+    .material-input:focus ~ .input-highlight {
+        width: 100%;
+    }
+
+    .error-message {
+        color: var(--error-color);
+        font-size: 0.8rem;
+        margin-top: 0.5rem;
+        display: block;
+    }
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 2rem;
+    }
+
+    .btn-submit {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 0.75rem 2rem;
+        border-radius: 8px;
+        font-weight: 500;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        transition: all 0.3s;
+        box-shadow: 0 2px 4px rgba(98, 0, 238, 0.2);
+    }
+
+    .btn-submit:hover {
+        background: var(--primary-light);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(98, 0, 238, 0.3);
+    }
+
+    @@media (max-width: 768px) {
+        .dashboard-container {
+            padding: 1rem;
+        }
+        
+        .gradient-header {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+ 
+<script>
+    // إضافة تأثيرات تفاعلية للحقول
+    document.querySelectorAll('.material-input').forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.querySelector('.input-highlight').style.width = '100%';
+        });
+        
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.querySelector('.input-highlight').style.width = '0';
+            }
+        });
+    });
+</script>

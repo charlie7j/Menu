@@ -1,0 +1,293 @@
+﻿@model Menu.Models.MenuItem
+@{
+    ViewData["Title"] = "Professional Menu Creator";
+}
+
+<div class="container-fluid">
+    <div class="card border-0 advanced-card">
+        <div class="card-header bg-danger text-white py-3">
+            <h2 class="mb-0"><i class="bi bi-menu-button-wide me-2"></i>إنشاء عنصر جديد</h2>
+        </div>
+
+        <form asp-action="Create" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <div class="card-body">
+                <!-- قسم الصورة الرئيسية -->
+                <div class="row mb-5">
+                    <div class="col-md-4">
+                        <div class="image-upload-box">
+                            <input type="file" name="imageFile" id="mainImage" accept="image/*" hidden>
+                            <label for="mainImage" class="upload-label w-100">
+                                <div class="preview-area">
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23bb2d3b'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E" 
+                                         class="preview-img w-100" 
+                                         id="imagePreview">
+                                    <div class="upload-overlay">
+                                        <i class="bi bi-camera fs-1"></i>
+                                        <div class="mt-2">     </div>
+                                    </div>
+                                </div>
+                            </label>
+                            <span asp-validation-for="ImageUrl" class="text-danger small mt-2 d-block"></span>
+                        </div>
+                    </div>
+
+                    <!-- المعلومات الأساسية -->
+                    <div class="col-md-8">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <input asp-for="Name" class="form-control" placeholder=" ">
+                                    <label asp-for="Name">اسم العنصر</label>
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Price" class="form-control" placeholder=" ">
+                                    <label asp-for="Price">السعر الأساسي</label>
+                                    <span asp-validation-for="Price" class="text-danger small"></span>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Category">
+                                        <option value="">اختر التصنيف</option>
+                                    </select>
+                                    <label asp-for="CategoryId">التصنيف</label>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <textarea asp-for="Description" class="form-control" placeholder=" " style="height: 100px"></textarea>
+                                    <label asp-for="Description">الوصف التفصيلي</label>
+                                    <span asp-validation-for="Description" class="text-danger small"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- الأحجام -->
+                <div class="section-box mb-5">
+
+                    <div class="row section-title border-bottom border-2 border-danger">
+                        <div class="col-10"><h4 ><i class="bi bi-arrows-fullscreen me-2"></i>الأحجام المتاحة</h4></div>
+                        <div class="col-2"><a asp-controller="Size" asp-action="Create" target="_blank" class="btn btn-danger"> add new size </a></div>
+                    </div>
+
+                    <div class="row g-3">
+                        @for (int i = 0; i < ViewBag.sizes.Count; i++)
+                        {
+                            <div class="col-md-6">
+                                <div class="size-option">
+                                    <div class="form-check">
+                                        <input type="checkbox" 
+                                               class="form-check-input" 
+                                               name="SelectedSize[@i].SizeId" 
+                                               value="@ViewBag.sizes[i].SizeId" 
+                                               id="size_@i">
+                                        <label class="form-check-label" for="size_@i">
+                                            <span class="size-name">@ViewBag.sizes[i].Name</span>
+                                            <div class="price-input">
+                                                <span class="input-addon">+</span>
+                                                <input type="number" 
+                                                       class="form-control" 
+                                                       name="SelectedSize[@i].ExtraPrice" 
+                                                       placeholder="السعر الإضافي">
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                <!-- المكونات -->
+                <div class="section-box">
+                    <h4 class="section-title"><i class="bi bi-ui-checks me-2"></i>المكونات الإضافية</h4>
+                    <div class="row g-3">
+                        @for (int i = 0; i < ViewBag.Ingredient.Count; i++)
+                        {
+                            <div class="col-md-6">
+                                <div class="ingredient-option">
+                                    <div class="form-check">
+                                        <input type="checkbox" 
+                                               class="form-check-input" 
+                                               name="SelectedIngredients[@i].IngredientId" 
+                                               value="@ViewBag.Ingredient[i].IngredientId" 
+                                               id="ingredient_@i">
+                                        <label class="form-check-label" for="ingredient_@i">
+                                            <span class="ingredient-name">@ViewBag.Ingredient[i].Name</span>
+                                            <div class="ingredient-controls">
+                                                <div class="price-input mb-2">
+                                                    <span class="input-addon">+</span>
+                                                    <input type="number" 
+                                                           class="form-control" 
+                                                           name="SelectedIngredients[@i].ExtraPrice" 
+                                                           value="0"
+                                                           placeholder="السعر">
+                                                </div>
+                                                <div class="status-buttons">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" 
+                                                               type="checkbox" 
+                                                               name="SelectedIngredients[@i].PrimaryStatus" 
+                                                               value="true">
+                                                        <label class="form-check-label">أساسي</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" 
+                                                               type="checkbox" 
+                                                               name="SelectedIngredients[@i].SubStatus" 
+                                                               value="true">
+                                                        <label class="form-check-label">فرعي</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" 
+                                                               type="checkbox" 
+                                                               name="SelectedIngredients[@i].AdditionalStatus" 
+                                                               value="true">
+                                                        <label class="form-check-label">إضافي</label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- أزرار التحكم -->
+            <div class="card-footer bg-light py-3">
+                <div class="d-flex justify-content-end gap-2">
+                    <button type="reset" class="btn btn-secondary px-4">
+                        <i class="bi bi-x-circle me-2"></i>إلغاء
+                    </button>
+                    <button type="submit" class="btn btn-danger px-4">
+                        <i class="bi bi-save me-2"></i>حفظ العنصر
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+ 
+<style>
+    .advanced-card {
+        overflow: hidden;
+    }
+
+    .image-upload-box {
+        border: 2px dashed #dee2e6;
+        border-radius: 0.75rem;
+        padding: 1rem;
+        background: #f8f9fa;
+    }
+
+    .preview-area {
+        position: relative;
+        min-height: 250px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border-radius: 0.5rem;
+    }
+
+    .preview-img {
+        max-width: 100%;
+        height: auto;
+        object-fit: cover;
+        transition: all 0.3s;
+    }
+
+    .upload-overlay {
+        position: absolute;
+        text-align: center;
+        color: #0d6efd;
+        z-index: 2;
+    }
+
+    .section-box {
+        background: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0.75rem;
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .section-title {
+        color: #2c3e50;
+        /*border-bottom: 2px solid #0d6efd;*/
+        padding-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .size-option, .ingredient-option {
+        background: #f8f9fa;
+        border-radius: 0.5rem;
+        padding: 1rem;
+        transition: all 0.2s;
+    }
+
+     
+
+    .price-input {
+        position: relative;
+    }
+
+    .input-addon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 2;
+        color: #6c757d;
+    }
+
+    .price-input .form-control {
+        padding-left: 30px;
+    }
+
+    .status-buttons {
+        border-top: 1px solid #eee;
+        padding-top: 0.5rem;
+        margin-top: 0.5rem;
+    }
+</style>
+ 
+<script>
+    // معاينة الصورة
+    document.getElementById('mainImage').addEventListener('change', function(e) {
+        const [file] = e.target.files
+        const preview = document.getElementById('imagePreview')
+        if (file) {
+            preview.src = URL.createObjectURL(file)
+            preview.style.borderRadius = '0.5rem'
+            preview.parentElement.style.border = 'none'
+        }
+    })
+
+    // التحقق من الصحة
+    (() => {
+        'use strict'
+        const forms = document.querySelectorAll('.needs-validation')
+        Array.from(forms).forEach(form => {
+            form.addEventListener('submit', event => {
+                if (!form.checkValidity()) {
+                    event.preventDefault()
+                    event.stopPropagation()
+                }
+                form.classList.add('was-validated')
+            }, false)
+        })
+    })()
+</script>

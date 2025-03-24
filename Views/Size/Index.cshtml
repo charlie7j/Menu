@@ -1,0 +1,35 @@
+
+@model IEnumerable<Size>
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+
+<h1>الأحجام</h1>
+
+<p>
+    <a asp-action="Create">إضافة حجم جديد</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>الاسم</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Name</td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.SizeId">تعديل</a> |
+                    <a asp-action="Details" asp-route-id="@item.SizeId">تفاصيل</a> |
+                    <a asp-action="Delete" asp-route-id="@item.SizeId">حذف</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

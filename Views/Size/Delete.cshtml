@@ -1,0 +1,26 @@
+@model Size
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+
+<h1>حذف الحجم</h1>
+
+<h3>هل أنت متأكد من حذف هذا الحجم؟</h3>
+<div>
+    <h4>الحجم</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">الاسم</dt>
+        <dd class="col-sm-10">@Model.Name</dd>
+        <dt class="col-sm-2">السعر الإضافي</dt>
+        <dd class="col-sm-10">@Model.ExtraPrice</dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="SizeId" />
+        <input type="submit" value="حذف" class="btn btn-danger" /> |
+        <a asp-action="Index">العودة إلى القائمة</a>
+    </form>
+</div>

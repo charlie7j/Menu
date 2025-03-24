@@ -1,0 +1,29 @@
+@model Size
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+
+<h1>تعديل الحجم</h1>
+
+<form asp-action="Edit">
+    <input type="hidden" asp-for="SizeId" />
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ExtraPrice" class="control-label"></label>
+        <input asp-for="ExtraPrice" class="form-control" />
+        <span asp-validation-for="ExtraPrice" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <input type="submit" value="حفظ" class="btn btn-primary" />
+    </div>
+</form>
+
+<div>
+    <a asp-action="Index">العودة إلى القائمة</a>
+</div>
