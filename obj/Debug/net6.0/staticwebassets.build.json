@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "TL1tyF1WuL/BzIJTT1fYTO1/30iT3NbbfsIWmbFHC4c=",
+  "Hash": "2x08R5ODzupSKDSNrVjvyis3tiG0PVM5bUofJQQKOqs=",
   "Source": "Menu",
   "BasePath": "_content/Menu",
   "Mode": "Default",
@@ -1195,6 +1195,25 @@
       "OriginalItemSpec": "/workspaces/Menu/obj/Debug/net6.0/scopedcss/projectbundle/Menu.bundle.scp.css"
     },
     {
+      "Identity": "/workspaces/Menu/wwwroot/css/Cust/Style.css",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "css/Cust/Style.css",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/css/Cust/Style.css"
+    },
+    {
       "Identity": "/workspaces/Menu/wwwroot/css/site.css",
       "SourceId": "Menu",
       "SourceType": "Discovered",
@@ -1269,6 +1288,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/menuItems/49affa91-f7a6-495e-9344-50541973d3b3_Desert.jpg"
+    },
+    {
+      "Identity": "/workspaces/Menu/wwwroot/images4site/restaurant.png",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "images4site/restaurant.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images4site/restaurant.png"
     },
     {
       "Identity": "/workspaces/Menu/wwwroot/js/site.js",

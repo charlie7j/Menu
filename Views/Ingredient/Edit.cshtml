@@ -1,11 +1,11 @@
-@model Size
+@model Ingredient
 @{
-    ViewData["Title"] = "تعديل الحجم";
+    ViewData["Title"] = "تعديل المكون";
     Layout = "_LayoutDashboard";
 }
 
-<div class="container-fluid py-4" style="max-width: 800px;">
-    <div class="card">
+<div class="container-fluid py-4">
+    <div class="card shadow-lg">
         <!-- Header -->
         <div class="card-header bg-danger">
             <div class="row align-items-center">
@@ -25,20 +25,24 @@
         <!-- Form Body -->
         <div class="card-body">
             <form asp-action="Edit" class="material-form">
-                <input type="hidden" asp-for="SizeId" />
-
-                <div class="form-floating">
-                    <input asp-for="Name" class="form-control"/>
-                    <label asp-for="Name" class="form-label"></label>
+                <input type="hidden" asp-for="IngredientId" />
+                
+                <div class="form-floating mb-4">
+                    <input asp-for="Name" 
+                           class="form-control material-input" 
+                           placeholder=" "
+                           required />
+                    <label asp-for="Name" class="material-label"></label>
                     <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
                     <div class="input-highlight"></div>
                 </div>
 
+
                 <div class="d-flex justify-content-between mt-5">
-                    <a asp-action="Index" class="btn btn-outline-danger">
+                    <a asp-action="Index" class="btn btn-outline-danger px-4">
                         <i class="bi bi-x-circle me-2"></i>إلغاء
                     </a>
-                    <button type="submit" class="btn btn-danger">
+                    <button type="submit" class="btn btn-danger px-4">
                         <i class="bi bi-save me-2"></i>حفظ التغييرات
                     </button>
                 </div>
@@ -47,38 +51,21 @@
     </div>
 </div>
 
+ 
 <style>
     .material-form {
-        max-width: 600px;
+        max-width: 800px;
         margin: 0 auto;
     }
 
-    .material-input {
-        border: none;
-        border-bottom: 2px solid #dee2e6;
-        border-radius: 0;
-        padding-left: 0;
-        transition: all 0.3s;
+    .form-switch .form-check-input {
+        width: 3em;
+        height: 1.5em;
     }
 
-    .material-input:focus {
-        box-shadow: none;
+    .form-check-input:checked {
+        background-color: #dc3545;
         border-color: #dc3545;
-    }
-
-    .material-label {
-        position: absolute;
-        left: 0;
-        top: 0;
-        color: #6c757d;
-        transition: all 0.3s;
-    }
-
-    .material-input:focus+.material-label,
-    .material-input:not(:placeholder-shown)+.material-label {
-        transform: translateY(-1.5rem);
-        font-size: 0.9rem;
-        color: #dc3545;
     }
 
     .input-highlight {
@@ -90,26 +77,15 @@
         background: #dc3545;
         transition: width 0.3s;
     }
-
-    .material-input:focus~.input-highlight {
-        width: 100%;
-    }
-
-    .btn-outline-danger {
-        border: 2px solid #dc3545;
-        color: #dc3545;
-    }
-
-  
 </style>
-
+ 
 <script>
     document.querySelectorAll('.material-input').forEach(input => {
-        input.addEventListener('focus', function () {
+        input.addEventListener('focus', function() {
             this.parentElement.querySelector('.input-highlight').style.width = '100%';
         });
-
-        input.addEventListener('blur', function () {
+        
+        input.addEventListener('blur', function() {
             if (!this.value) {
                 this.parentElement.querySelector('.input-highlight').style.width = '0';
             }

@@ -1,18 +1,19 @@
 @model IEnumerable<Ingredient>
 @{
     ViewData["Title"] = "المكونات";
+    Layout = "_LayoutDashboard";
 }
 
 <div class="container-fluid py-4">
-    <div class="card shadow-lg">
-        <div class="card-header bg-danger">
+    <div class="card">
+        <div class="card-header bg-white">
             <div class="row align-items-center">
-                <div class="col-8">
-                    <h3 class="text-white mb-0"><i class="bi bi-box-seam me-2"></i>@ViewData["Title"]</h3>
+                <div class="col-11">
+                    <h3 class="text-secondary text-center mb-0"><i class="bi bi-box-seam me-2"></i>@ViewData["Title"]</h3>
                 </div>
-                <div class="col-4 text-end">
-                    <a asp-action="Create" class="btn btn-light btn-sm">
-                        <i class="bi bi-plus-circle me-2"></i>إضافة جديد
+                <div class="col-1 text-end">
+                    <a asp-action="Create" class="btn btn-outline-danger btn-sm">
+                        +
                     </a>
                 </div>
             </div>
@@ -46,9 +47,7 @@
                             <tr class="hover-scale">
                                 <td class="ps-4">
                                     <div class="d-flex align-items-center">
-                                        <div class="me-3">
-                                            <span class="badge bg-danger">@item.ExtraPrice.ToString("C")</span>
-                                        </div>
+                                       
                                         <p class="text-dark font-weight-bold mb-0">@item.Name</p>
                                     </div>
                                 </td>
@@ -56,11 +55,11 @@
                                     <div class="btn-group">
                                         <a asp-action="Edit" asp-route-id="@item.IngredientId" 
                                            class="btn btn-outline-danger btn-sm me-2">
-                                            <i class="bi bi-pencil-square"></i>
+                                            Edit
                                         </a>
                                         <a asp-action="Delete" asp-route-id="@item.IngredientId" 
                                            class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i>
+                                            Delete
                                         </a>
                                     </div>
                                 </td>
@@ -73,7 +72,7 @@
     </div>
 </div>
 
-@section Scripts {
+ 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const searchInput = document.getElementById('searchInput');
@@ -88,4 +87,4 @@
         });
     });
 </script>
-}
+ 

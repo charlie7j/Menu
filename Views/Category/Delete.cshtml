@@ -1,0 +1,40 @@
+@model Category
+
+@{
+    ViewData["Title"] = "حذف الفئة";
+    Layout = "_LayoutDashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-danger">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-exclamation-triangle me-2"></i>تحذير!
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-danger">هل أنت متأكد من رغبتك في حذف هذه الفئة؟</h5>
+                    <dl class="row mt-3">
+                        <dt class="col-sm-4">الرقم:</dt>
+                        <dd class="col-sm-8">@Model.CategoryId</dd>
+                        <dt class="col-sm-4">الاسم:</dt>
+                        <dd class="col-sm-8">@Model.Name</dd>
+                    </dl>
+                    <form asp-action="Delete">
+                        <input type="hidden" asp-for="CategoryId" />
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash-alt me-1"></i>تأكيد الحذف
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-danger">
+                                <i class="fas fa-arrow-left me-1"></i>تراجع
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

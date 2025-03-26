@@ -26,28 +26,25 @@ namespace Menu.Controllers
         }
 
         // GET: Ingredient
-        public IActionResult Index(string searchString)
+        [HttpGet("Index")]
+        public IActionResult Index()
         {
-            var Ingredient = from i in _context.Ingredient select i;
+            var Ingredient = _context.Ingredient.ToList();
 
-            if (!string.IsNullOrEmpty(searchString))
-            {
-                Ingredient = Ingredient.Where(i => i.Name.Contains(searchString));
-            }
-
-            return View( Ingredient.ToList());
+            return View(Ingredient);
         }
 
         // GET: Ingredient/Create
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         // POST: Ingredient/Create
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("IngredientId,Name,ExtraPrice,PrimaryStatus,SubStatus,AdditionalStatus")] Ingredient ingredient)
+        public IActionResult Create([Bind("IngredientId,Name")] Ingredient ingredient)
         {
             if (ModelState.IsValid)
             {
@@ -59,20 +56,21 @@ namespace Menu.Controllers
         }
 
         // GET: Ingredient/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet("Edit/{id}")]
+        public IActionResult Edit(int? id)
         {
             if (id == null) return NotFound();
 
-            var ingredient = await _context.Ingredient.FindAsync(id);
+            var ingredient =  _context.Ingredient.Find(id);
             if (ingredient == null) return NotFound();
 
             return View(ingredient);
         }
 
         // POST: Ingredient/Edit/5
-        [HttpPost]
+        [HttpPost("Edit/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("IngredientId,Name,ExtraPrice,PrimaryStatus,SubStatus,AdditionalStatus")] Ingredient ingredient)
+        public IActionResult Edit(int id, [Bind("IngredientId,Name")] Ingredient ingredient)
         {
             if (id != ingredient.IngredientId) return NotFound();
 
@@ -81,19 +79,21 @@ namespace Menu.Controllers
                 try
                 {
                     _context.Update(ingredient);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
+                    return RedirectToAction("Index");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!IngredientExists(ingredient.IngredientId)) return NotFound();
                     else throw;
                 }
-                return RedirectToAction(nameof(Index));
+               
             }
             return View(ingredient);
         }
 
         // GET: Ingredient/Delete/5
+        [HttpGet("Delete/{id}")]
         public IActionResult Delete(int? id)
         {
             if (id == null) return NotFound();
@@ -106,14 +106,14 @@ namespace Menu.Controllers
         }
 
         // POST: Ingredient/Delete/5
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete/{id}"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var ingredient = await _context.Ingredient.FindAsync(id);
+            var ingredient =  _context.Ingredient.Find(id);
             _context.Ingredient.Remove(ingredient);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.SaveChanges();
+            return RedirectToAction("Index");
         }
 
         private bool IngredientExists(int id)

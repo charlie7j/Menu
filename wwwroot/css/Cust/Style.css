@@ -1,0 +1,13 @@
+
+
+.bg-Main{
+    background-color: #e8e8e9;
+}
+
+.Cust-list-group-item {
+    position: relative;
+    display: block;
+    padding: .5rem 1rem; 
+    text-decoration: none;
+    color: #fff;
+  }

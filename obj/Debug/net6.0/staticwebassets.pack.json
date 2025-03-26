@@ -5,6 +5,10 @@
       "PackagePath": "staticwebassets/Menu.bundle.scp.css"
     },
     {
+      "Id": "/workspaces/Menu/wwwroot/css/Cust/Style.css",
+      "PackagePath": "staticwebassets/css/Cust/Style.css"
+    },
+    {
       "Id": "/workspaces/Menu/wwwroot/css/site.css",
       "PackagePath": "staticwebassets/css/site.css"
     },
@@ -19,6 +23,10 @@
     {
       "Id": "/workspaces/Menu/wwwroot/images/menuItems/49affa91-f7a6-495e-9344-50541973d3b3_Desert.jpg",
       "PackagePath": "staticwebassets/images/menuItems/49affa91-f7a6-495e-9344-50541973d3b3_Desert.jpg"
+    },
+    {
+      "Id": "/workspaces/Menu/wwwroot/images4site/restaurant.png",
+      "PackagePath": "staticwebassets/images4site/restaurant.png"
     },
     {
       "Id": "/workspaces/Menu/wwwroot/js/site.js",

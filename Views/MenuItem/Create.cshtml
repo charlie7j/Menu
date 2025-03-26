@@ -1,19 +1,26 @@
 ﻿@model Menu.Models.MenuItem
 @{
     ViewData["Title"] = "Professional Menu Creator";
+    Layout = "_LayoutDashboard";
 }
 
 <div class="container-fluid">
     <div class="card border-0 advanced-card">
-        <div class="card-header bg-danger text-white py-3">
-            <h2 class="mb-0"><i class="bi bi-menu-button-wide me-2"></i>إنشاء عنصر جديد</h2>
-        </div>
+       
 
         <form asp-action="Create" enctype="multipart/form-data" class="needs-validation" novalidate>
-            <div class="card-body">
+         
+            <div class="card-body bg-Main">
                 <!-- قسم الصورة الرئيسية -->
-                <div class="row mb-5">
-                    <div class="col-md-4">
+                <div class="mb-5 bg-white p-4 pt-2 rounded">
+
+                    <div class="row">
+                         <div class="col-12">
+                        <h2 class="text-center">gg</h2>
+                        <hr>
+                    </div>
+                     
+                    <div class="col-md-4 ">
                         <div class="image-upload-box">
                             <input type="file" name="imageFile" id="mainImage" accept="image/*" hidden>
                             <label for="mainImage" class="upload-label w-100">
@@ -68,14 +75,19 @@
                             </div>
                         </div>
                     </div>
+
+                </div>
+                   
+
                 </div>
 
                 <!-- الأحجام -->
                 <div class="section-box mb-5">
 
-                    <div class="row section-title border-bottom border-2 border-danger">
-                        <div class="col-10"><h4 ><i class="bi bi-arrows-fullscreen me-2"></i>الأحجام المتاحة</h4></div>
-                        <div class="col-2"><a asp-controller="Size" asp-action="Create" target="_blank" class="btn btn-danger"> add new size </a></div>
+                    <div class="row section-title border-bottom border-1 border-danger">
+                        <div class="col-11 text-center"><h4 ><i class="bi bi-arrows-fullscreen me-2"></i>الأحجام المتاحة</h4></div>
+                        <div class="col-1"><a asp-controller="Size" asp-action="Create" class="btn btn-outline-danger" > + </a></div>
+ 
                     </div>
 
                     <div class="row g-3">
@@ -108,7 +120,17 @@
 
                 <!-- المكونات -->
                 <div class="section-box">
-                    <h4 class="section-title"><i class="bi bi-ui-checks me-2"></i>المكونات الإضافية</h4>
+
+                    <div class="row section-title border-bottom border-1 border-danger">
+                        <div class="col-11">
+                            <h4 class="text-center"><i class="bi bi-ui-checks me-2"></i>المكونات الإضافية</h4>
+                        </div>
+                        <div class="col-1">
+                            <a asp-controller="Ingredient" asp-action="Create" class="btn btn-outline-danger"> + </a>
+                        </div>
+                    </div>
+
+
                     <div class="row g-3">
                         @for (int i = 0; i < ViewBag.Ingredient.Count; i++)
                         {
@@ -120,6 +142,9 @@
                                                name="SelectedIngredients[@i].IngredientId" 
                                                value="@ViewBag.Ingredient[i].IngredientId" 
                                                id="ingredient_@i">
+                                            
+                                           
+
                                         <label class="form-check-label" for="ingredient_@i">
                                             <span class="ingredient-name">@ViewBag.Ingredient[i].Name</span>
                                             <div class="ingredient-controls">
@@ -165,7 +190,7 @@
             </div>
 
             <!-- أزرار التحكم -->
-            <div class="card-footer bg-light py-3">
+            <div class="card-footer py-3">
                 <div class="d-flex justify-content-end gap-2">
                     <button type="reset" class="btn btn-secondary px-4">
                         <i class="bi bi-x-circle me-2"></i>إلغاء
@@ -175,7 +200,12 @@
                     </button>
                 </div>
             </div>
+
+
+
         </form>
+
+
     </div>
 </div>
 
