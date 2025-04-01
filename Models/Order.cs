@@ -15,4 +15,5 @@ namespace Menu.Models
         // قائمة الأصناف المطلوبة ضمن الطلب
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
+    
 }

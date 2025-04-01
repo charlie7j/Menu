@@ -18,26 +18,29 @@ namespace Menu.Controllers
 
         private readonly ApplicationDbContext _context;
 
-        public CategoryController(ApplicationDbContext context)
+        public CategoryController(ILogger<CategoryController> logger,ApplicationDbContext context)
         {
+            _logger = logger;
             _context = context;
         }
 
         // عرض جميع الفئات (Index)
+        [HttpGet("Index")]
         public IActionResult Index()
         {
-            var Category = _context.Category.ToList();
+            var Category = _context.Category!.ToList();
             return View(Category);
         }
 
         // عرض نموذج الإضافة (Create - GET)
+        [HttpGet("Create")]
         public IActionResult Create()
         {
             return View();
         }
 
         // معالجة الإضافة (Create - POST)
-        [HttpPost]
+        [HttpPost("Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Name")] Category category)
         {
@@ -45,20 +48,21 @@ namespace Menu.Controllers
             {
                 _context.Add(category);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(category);
         }
 
         // عرض نموذج التعديل (Edit - GET)
-        public async Task<IActionResult> Edit(int? id)
+        [HttpGet("Edit")]
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var category = await _context.Category.FindAsync(id);
+            var category = _context!.Category!.Find(id);
             if (category == null)
             {
                 return NotFound();
@@ -67,9 +71,9 @@ namespace Menu.Controllers
         }
 
         // معالجة التعديل (Edit - POST)
-        [HttpPost]
+        [HttpPost("Edit")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CategoryId,Name")] Category category)
+        public IActionResult Edit(int id, [Bind("CategoryId,Name")] Category category)
         {
             if (id != category.CategoryId)
             {
@@ -81,7 +85,7 @@ namespace Menu.Controllers
                 try
                 {
                     _context.Update(category);
-                    await _context.SaveChangesAsync();
+                    _context.SaveChanges();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -94,12 +98,13 @@ namespace Menu.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(category);
         }
 
         // عرض نموذج الحذف (Delete - GET)
+        [HttpGet("Delete")]
         public IActionResult Delete(int? id)
         {
             if (id == null)
@@ -107,7 +112,7 @@ namespace Menu.Controllers
                 return NotFound();
             }
 
-            var category = _context.Category
+            var category = _context.Category!
                 .FirstOrDefault(m => m.CategoryId == id);
             if (category == null)
             {
@@ -118,19 +123,19 @@ namespace Menu.Controllers
         }
 
         // معالجة الحذف (Delete - POST)
-        [HttpPost, ActionName("Delete")]
+        [HttpPost("Delete"), ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var category = await _context.Category.FindAsync(id);
+            var category =  _context!.Category!.Find(id);
             _context.Category.Remove(category);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            _context.SaveChangesAsync();
+            return RedirectToAction("Index");
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Category.Any(e => e.CategoryId == id);
+            return _context.Category!.Any(e => e.CategoryId == id);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

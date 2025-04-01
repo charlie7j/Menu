@@ -1,0 +1,370 @@
+@{
+    ViewData["Title"] = "إنشاء طلب جديد";
+    Layout = "_LayoutDashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-danger text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-cart-plus me-2"></i>إنشاء طلب جديد
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post">
+                        <!-- قسم البحث والمعلومات الأساسية -->
+                        <div class="row mb-4 g-3">
+                            <div class="col-md-12">
+                                <div class="input-group">
+                                    <input type="text" 
+                                           id="productSearch" 
+                                           class="form-control"
+                                           placeholder="ابحث عن منتج...">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <input name="tableNumber" 
+                                       class="form-control" 
+                                       placeholder="رقم الطاولة"
+                                       required>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <textarea name="customerNote" 
+                                          class="form-control" 
+                                          placeholder="ملاحظات للطلب"
+                                          rows="1"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            @foreach (var item in Model)
+                            {
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100" id="Ca_@item.MenuItemId">
+                                        <img src="@item.ImageUrl" class="card-img-top" alt="@item.Name" style="height: 200px; object-fit: cover;">
+                                        <div class="card-body">
+                                            <strong id="N_@item.MenuItemId">@item.Name</strong>
+                                            <p><strong>التصنيف: </strong><span id="C_@item.MenuItemId">@item.Category?.Name</span></p>
+                                            <p id="D_@item.MenuItemId">@item.Description</p>
+                                            <p class="card-text text-center" id="P_@item.MenuItemId"><strong>السعر: </strong>@item.Price.ToString("")</p>
+
+                                           
+                                            <!-- بداية قسم الإضافات -->
+                                            <div class="accordion accordion-flush" id="accordion_@item.MenuItemId">
+                                                <!-- إضافة المكونات -->
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" 
+                                                                type="button" 
+                                                                data-bs-toggle="collapse" 
+                                                                data-bs-target="#addons_@item.MenuItemId">
+                                                            إضافة مكونات
+                                                        </button>
+                                                    </h2>
+                                                    <div id="addons_@item.MenuItemId" 
+                                                         class="accordion-collapse collapse" 
+                                                         data-bs-parent="#accordion_@item.MenuItemId">
+                                                        <div class="accordion-body">
+                                                            <!-- محتوى الإضافات هنا -->
+                                                                
+                                                                <div class="row">
+                                                                    @foreach(var addons in item.MenuItemIngredients){
+                                                                        <div class="col-3">@addons.Ingredient.Name</div>
+                                                                        <div class="col-3">@addons.ExtraPrice</div>
+                                                                        <div class="col-3">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-danger rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-addon-price="@addons.ExtraPrice" data-action="remove">
+                                                                        </div>
+                                                                        <div class="col-3">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-success rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-action="add">
+                                                                        </div>
+                                                                    }
+                                                                </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- إزالة المكونات -->
+                                                <div class="accordion-item">
+                                                    <h2 class="accordion-header">
+                                                        <button class="accordion-button collapsed" 
+                                                                type="button" 
+                                                                data-bs-toggle="collapse" 
+                                                                data-bs-target="#removals_@item.MenuItemId">
+                                                            الاحجام
+                                                        </button>
+                                                    </h2>
+                                                    <div id="removals_@item.MenuItemId" 
+                                                         class="accordion-collapse collapse" 
+                                                         data-bs-parent="#accordion_@item.MenuItemId">
+                                                        <div class="accordion-body">
+                                                            @foreach(var Size in item.MenuItemSize){
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-3">@Size.MenuItemSizeId</div>
+                                                                <div class="col-3">@Size.Size.Name</div>
+                                                                <div class="col-3">@Size.PriceAdjustment</div>
+                                                                <div class="col-3"> 
+                                                                    <div class="form-check">
+                                                                    <input 
+                                                                        class="form-check-input size-radio" 
+                                                                        type="radio" 
+                                                                        name="flexRadioDefault" 
+                                                                        id="flexRadioDefault1"
+                                                                        data-size-id="@Size.MenuItemSizeId"
+                                                                        data-size-name="@Size.Size.Name"
+                                                                        data-size-price="@Size.PriceAdjustment"
+                                                                        >
+                                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                                         
+                                                                    </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                      
+                  
+                                                                    
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- نهاية قسم الإضافات -->
+
+
+                                            <input type="button" 
+                                                   value="اضافة الى الطلب" 
+                                                   class="my-4 btn btn-dark" 
+                                                   onclick="add2Order(@item.MenuItemId);">
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+
+                        <div id="selectedItemsList"></div>
+
+                        <!-- زر التأكيد -->
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-light btn-lg px-5">
+                                <i class="bi bi-check2-circle me-2"></i>تأكيد الطلب
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+                                                
+
+
+<script>
+
+let itemCounter = 0;
+ 
+
+ 
+
+function add2Order(M_id) {
+    
+    const productCard = document.querySelector(`[id='N_${M_id}']`).closest('.card');
+
+    // تحديد جميع مربعات الاختيار التي تم تحديدها داخل العنصر
+    const checkboxes = document.querySelectorAll(`#Ca_${M_id} .addon-checkbox:checked`);
+
+    const radiobuttom = document.querySelectorAll(`#Ca_${M_id} .size-radio:checked`);
+
+    
+
+    
+    let addonsToAdd = [];
+    let addonsToRemove = [];
+    let sizearray = [];
+    
+    
+    const itemData = {
+        id: M_id,
+        index: itemCounter,
+        name: document.getElementById(`N_${M_id}`).innerText,
+        category: document.getElementById(`C_${M_id}`).innerText.replace('التصنيف:', ''),
+        description: document.getElementById(`D_${M_id}`).innerText,
+        price: document.getElementById(`P_${M_id}`).innerText.replace('السعر: ', ''),
+        image: productCard.querySelector('img').src,
+        addedAddOns: addonsToAdd,
+        removedAddOns: addonsToRemove,
+        sizearray : sizearray
+    };
+
+
+    if (checkboxes.length > 0) {
+            // إنشاء كائنين لتخزين الإضافات والإزالات
+            checkboxes.forEach(checkbox => {
+                let addonId = checkbox.getAttribute("data-addon-id");
+                let action = checkbox.getAttribute("data-action");
+                let name = checkbox.getAttribute("data-addon-name");
+                let addonprice = checkbox.getAttribute("data-addon-price");
+
+                let addonObj = { id: addonId, name: name, price : addonprice }; 
+
+                if (action === "add") {
+                    addonsToAdd.push(addonObj);
+                    itemData.price += addonprice;
+                } else {
+                    addonsToRemove.push(addonObj);
+                }
+            });
+    }
+
+
+
+    if (radiobuttom.length > 0) {
+            // إنشاء كائنين لتخزين الإضافات والإزالات
+            radiobuttom.forEach(radiobuttom => {
+                let sizeId = radiobuttom.getAttribute("data-size-id");
+                let name =   radiobuttom.getAttribute("data-size-name");
+                let Sizeprice =  radiobuttom.getAttribute("data-size-price");
+                
+                let sizeObj = { id: sizeId, name: name , price : Sizeprice }; 
+                sizearray.push(sizeObj);
+                
+                itemData.price = Sizeprice;
+                    
+            });
+        }
+
+
+    
+   
+
+    const orderItem = `
+    <div class="selected-item mb-3 p-3 border-bottom" data-item-id="${M_id}">
+        <div class="row align-items-center">
+            <div class="col-md-2">
+                <img src="${itemData.image}" 
+                     class="img-thumbnail" 
+                     style="width:80px;height:80px">
+            </div>
+            
+            <div class="col-md-3">
+                <h6>${itemData.name}</h6>
+                <small class="text-muted">${itemData.price}</small>
+                
+                <input type="hidden" 
+                       name="OrderItems[${itemCounter}].MenuItemId" 
+                       value="${M_id}">
+            </div>
+
+            <div class="col-md-3">
+                <label>الكمية</label>
+                <input type="number" 
+                       name="OrderItems[${itemCounter}].Quantity" 
+                       class="form-control" 
+                       value="1" 
+                       min="1" 
+                       required>
+            </div>
+            
+            <div class="col-md-2">
+                <button type="button" 
+                        class="btn btn-danger btn-sm remove-item"
+                        onclick="removeItem(${M_id})">
+                    <i class="bi bi-trash"></i>
+                </button>
+            </div>
+
+            <div class="col-12">
+               <div class="row">
+                    ${render(itemData.addedAddOns,itemCounter,"a")}
+               </div>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    ${render(itemData.removedAddOns,itemCounter,"r")}
+                </div>
+            </div>
+
+            <div class="col-12">
+                <div class="row">
+                    ${renderSize(itemData.sizearray,itemCounter)}
+                </div>
+            </div>
+
+
+            <div class="col-12">       
+                <textarea  name="ItemNote" rows="4" cols="50"></textarea>
+            </div>
+
+        </div>
+    </div>`;
+
+    document.getElementById('selectedItemsList').insertAdjacentHTML('beforeend', orderItem);
+    itemCounter++;
+}
+ 
+
+function render(Data, itemCounter,t) {
+    let html = ""; // تخزين الكود HTML هنا
+
+    for (let i = 0; i < Data.length; i++) {
+        if(t == "a"){
+            html += `
+            <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center">
+                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name} ( ${Data[i].price} )</strong>
+            </div>
+        `;
+        }else{
+            html += `
+            <div class="col-2 p-2 bg-danger m-1 rounded-3 text-center">
+                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name}</strong>
+            </div>
+        `;
+        }
+    }
+
+    return html; // إرجاع الكود HTML كسلسلة نصية
+}
+
+function renderSize(Data, itemCounter){
+
+    let html = ""; // تخزين الكود HTML هنا
+
+    for (let i = 0; i < Data.length; i++) {
+        html += `
+            <div class="col-2 p-2 bg-secondary m-1 rounded-3 text-center">
+                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name} </strong>
+            </div>
+        `;
+    }
+    return html; // إرجاع الكود HTML كسلسلة نصية
+}
+
+
+function removeItem(M_id) {
+    const itemToRemove = document.querySelector(`[data-item-id="${M_id}"]`);
+    if (itemToRemove) {
+        itemToRemove.remove();
+        itemsMap.delete(M_id);
+        
+        // إعادة ترتيب الفهارس
+        let newIndex = 0;
+        itemsMap.forEach(item => {
+            item.index = newIndex;
+            updateHiddenFields(item.id);
+            newIndex++;
+        });
+        itemCounter = itemsMap.size;
+    }
+}
+</script>
+ 

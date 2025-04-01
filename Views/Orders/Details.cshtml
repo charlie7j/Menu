@@ -1,0 +1,56 @@
+@model Order
+
+@{
+    ViewData["Title"] = "تفاصيل الطلب";
+    Layout = "_LayoutDashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm">
+                <div class="card-header bg-transparent border-0">
+                    <h4 class="text-danger mb-0">
+                        <i class="bi bi-receipt me-2"></i>تفاصيل الطلب #@Model.OrderId
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-4">
+                        <div class="col-md-6">
+                            <h5 class="text-danger">
+                                <i class="bi bi-info-circle me-2"></i>المعلومات الأساسية
+                            </h5>
+                            <ul class="list-group">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>رقم الطاولة:</span>
+                                    <span class="badge bg-danger">@Model.TableNumber</span>
+                                </li>
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <span>تاريخ الطلب:</span>
+                                    <span>@Model.OrderDateTime.ToString("yyyy/MM/dd")</span>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="col-md-6 mt-3 mt-md-0">
+                            <h5 class="text-danger">
+                                <i class="bi bi-chat-text me-2"></i>ملاحظات الزبون
+                            </h5>
+                            <div class="card border-danger">
+                                <div class="card-body">
+                                    @(Model.CustomerNote ?? "لا توجد ملاحظات")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4">
+                        <a asp-action="Index" class="btn btn-secondary">
+                            <i class="bi bi-arrow-return-left me-1"></i>العودة للقائمة
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

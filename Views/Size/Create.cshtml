@@ -4,20 +4,17 @@
     Layout = "_LayoutDashboard";
 }
 
-<div class="container">
-    <div class="glass-card border border-1">
+<div class="container-fluid">
+    <div class="border border-1">
         <!-- الهيدر -->
-        <div class="card-header gradient-header bg-danger">
+        <div class="card-header gradient-header">
             <div class="header-content">
-                <h1 class="page-title ">إضافة حجم جديد</h1>
+                <h3 class="text-center">إضافة حجم جديد</h3>
             </div>
-            <a asp-action="Index" class="back-link">
-                <i class="bi bi-arrow-left-circle"></i> العودة للقائمة
-            </a>
         </div>
 
         <!-- محتوى النموذج -->
-        <form asp-action="Create" class="dashboard-form">
+        <form asp-action="Create" class="dashboard-form bg-white">
             <!-- حقل الاسم -->
             <div class="form-floating">
                 <input asp-for="Name" class="form-control" 
@@ -47,15 +44,9 @@
         padding: 2rem;
     }
 
-    .glass-card {
-        overflow: hidden;
-        max-width: 800px;
-        margin: 0 auto;
-    }
+    
 
     .gradient-header {
-        color: white;
-        padding: 1.5rem;
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -79,18 +70,9 @@
         font-size: 1.8rem;
     }
 
-    .back-link {
-        color: white;
-        text-decoration: none;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        transition: opacity 0.3s;
-    }
+   
 
-    .back-link:hover {
-        opacity: 0.9;
-    }
+   
 
     .dashboard-form {
         padding: 2rem;

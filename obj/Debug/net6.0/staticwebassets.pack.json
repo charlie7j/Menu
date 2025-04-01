@@ -69,6 +69,14 @@
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-grid.rtl.min.css.map"
     },
     {
+      "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/css/bootstrap-icons.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-icons.css"
+    },
+    {
+      "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/css/bootstrap-icons.min.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-icons.min.css"
+    },
+    {
       "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/css/bootstrap-reboot.css",
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap-reboot.css"
     },
@@ -163,6 +171,10 @@
     {
       "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map",
       "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrap.rtl.min.css.map"
+    },
+    {
+      "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/css/bootstrapIcon.css",
+      "PackagePath": "staticwebassets/lib/bootstrap/dist/css/bootstrapIcon.css"
     },
     {
       "Id": "/workspaces/Menu/wwwroot/lib/bootstrap/dist/js/bootstrap.bundle.js",

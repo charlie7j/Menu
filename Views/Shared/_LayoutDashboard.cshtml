@@ -9,36 +9,11 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Menu.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/Cust/Style.css" asp-append-version="true">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 </head>
 
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-gradient  border-bottom box-shadow ">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Menu</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse"
-                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="MenuItem"
-                                asp-action="Create">Create MenuItem</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="LiveMenu" asp-action="Index">Live
-                                Menu</a>
-                        </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
+    
     <div class="container-fluid bg-Main">
         <main role="main" class="pb-3 ">
             <div class="row">
@@ -47,35 +22,52 @@
                     <div class="bg-dark h-100 rounded-3 text-white text-start py-4 px-2">
 
 
-                    <div class="p-3 d-flex justify-content-center align-items-center">
-                        <img src="~/images4site/restaurant.png" style="width: 165px; height: 165px;" class="" >
-                    </div>
+                        <div class="p-3 d-flex justify-content-center align-items-center">
+                            <img src="~/images4site/restaurant.png" style="width: 140px; height: 140px;" class="">
+                        </div>
 
 
 
-                        <span class="fst-italic fw-bold"> - Ingredient</span>
+                        <span class="fst-italic fw-bold"> <i class="bi bi-dot"></i> Ingredient</span>
                         <ul class="list-group list-group-flush">
-                            <a asp-controller="Ingredient" asp-action="Create" class="Cust-list-group-item"> -
-                                Create</a>
-                            <a asp-controller="Ingredient" asp-action="Index" class="Cust-list-group-item"> - Index</a>
+                            <a asp-controller="Ingredient" asp-action="Create" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i>
+                                <i class="bi bi-columns-gap"></i> Create</a>
+                            <a asp-controller="Ingredient" asp-action="Index" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-bar-chart-steps"></i> Index</a>
                         </ul>
 
-                        <span class="fst-italic fw-bold"> - MenuItem</span>
+                        <span class="fst-italic fw-bold"> <i class="bi bi-dot"></i> MenuItem</span>
                         <ul class="list-group list-group-flush">
-                            <a asp-controller="MenuItem" asp-action="Create" class="Cust-list-group-item"> - Create</a>
-                            <a asp-controller="MenuItem" asp-action="Index" class="Cust-list-group-item"> - Index</a>
+                            <a asp-controller="MenuItem" asp-action="Create" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-cup-hot-fill"></i> Create</a>
+                            <a asp-controller="MenuItem" asp-action="Index" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-grid-3x3-gap"></i> Index</a>
                         </ul>
 
-                        <span class="fst-italic fw-bold"> - Size</span>
+                        <span class="fst-italic fw-bold"> <i class="bi bi-dot"></i> Size</span>
                         <ul class="list-group list-group-flush">
-                            <a asp-controller="Size" asp-action="Create" class="Cust-list-group-item"> - Create</a>
-                            <a asp-controller="Size" asp-action="Index" class="Cust-list-group-item"> - Index</a>
+                            <a asp-controller="Size" asp-action="Create" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-view-stacked"></i> Create</a>
+                            <a asp-controller="Size" asp-action="Index" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-ui-checks-grid"></i> Index</a>
                         </ul>
 
-                        <span class="fst-italic fw-bold"> - Category</span>
+                        <span class="fst-italic fw-bold"> <i class="bi bi-dot"></i> Category</span>
                         <ul class="list-group list-group-flush">
-                            <a asp-controller="Category" asp-action="Create" class="Cust-list-group-item"> - Create</a>
-                            <a asp-controller="Category" asp-action="Index" class="Cust-list-group-item"> - Index</a>
+                            <a asp-controller="Category" asp-action="Create" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-link"></i> Create</a>
+                            <a asp-controller="Category" asp-action="Index" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-layout-wtf"></i> Index</a>
+                        </ul>
+
+
+                        <span class="fst-italic fw-bold"> <i class="bi bi-dot"></i> Orders</span>
+                        <ul class="list-group list-group-flush">
+                            <a asp-controller="Orders" asp-action="Create" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-cart-check"></i> Create</a>
+                            <a asp-controller="Orders" asp-action="Index" class="Cust-list-group-item"> <i
+                                    class="bi bi-caret-right-fill"></i> <i class="bi bi-border-style"></i> Index</a>
                         </ul>
 
 
