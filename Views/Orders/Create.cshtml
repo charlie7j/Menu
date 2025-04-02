@@ -77,10 +77,10 @@
                                                                         <div class="col-3">@addons.Ingredient.Name</div>
                                                                         <div class="col-3">@addons.ExtraPrice</div>
                                                                         <div class="col-3">
-                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-danger rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-addon-price="@addons.ExtraPrice" data-action="remove">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-danger rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-action="remove">
                                                                         </div>
                                                                         <div class="col-3">
-                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-success rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-action="add">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-success rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-addon-price="@addons.ExtraPrice" data-action="add">
                                                                         </div>
                                                                     }
                                                                 </div>
@@ -202,28 +202,6 @@ function add2Order(M_id) {
         sizearray : sizearray
     };
 
-
-    if (checkboxes.length > 0) {
-            // إنشاء كائنين لتخزين الإضافات والإزالات
-            checkboxes.forEach(checkbox => {
-                let addonId = checkbox.getAttribute("data-addon-id");
-                let action = checkbox.getAttribute("data-action");
-                let name = checkbox.getAttribute("data-addon-name");
-                let addonprice = checkbox.getAttribute("data-addon-price");
-
-                let addonObj = { id: addonId, name: name, price : addonprice }; 
-
-                if (action === "add") {
-                    addonsToAdd.push(addonObj);
-                    itemData.price += addonprice;
-                } else {
-                    addonsToRemove.push(addonObj);
-                }
-            });
-    }
-
-
-
     if (radiobuttom.length > 0) {
             // إنشاء كائنين لتخزين الإضافات والإزالات
             radiobuttom.forEach(radiobuttom => {
@@ -240,8 +218,30 @@ function add2Order(M_id) {
         }
 
 
-    
-   
+    if (checkboxes.length > 0) {
+            // إنشاء كائنين لتخزين الإضافات والإزالات
+            checkboxes.forEach(checkbox => {
+                let addonId = checkbox.getAttribute("data-addon-id");
+                let action = checkbox.getAttribute("data-action");
+                let name = checkbox.getAttribute("data-addon-name");
+                let addonprice = checkbox.getAttribute("data-addon-price");
+
+                let addonObj = { id: addonId, name: name, price : addonprice }; 
+
+                if (action === "add") {
+                    itemData.price = parseInt(itemData.price) + parseInt(addonprice);
+
+                    alert(itemData.price);
+
+                    addonsToAdd.push(addonObj);
+                    
+                } else {
+                    addonsToRemove.push(addonObj);
+                }
+            });
+    }
+
+
 
     const orderItem = `
     <div class="selected-item mb-3 p-3 border-bottom" data-item-id="${M_id}">
@@ -299,7 +299,7 @@ function add2Order(M_id) {
 
 
             <div class="col-12">       
-                <textarea  name="ItemNote" rows="4" cols="50"></textarea>
+                <textarea  name="OrderItems[${itemCounter}].ItemNote" rows="4" cols="50"></textarea>
             </div>
 
         </div>
@@ -313,19 +313,22 @@ function add2Order(M_id) {
 function render(Data, itemCounter,t) {
     let html = ""; // تخزين الكود HTML هنا
 
+
+    alert(JSON.stringify(Data));
+
     for (let i = 0; i < Data.length; i++) {
         if(t == "a"){
             html += `
-            <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center">
-                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
-                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name} ( ${Data[i].price} )</strong>
+            <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center"> 
+                <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredientId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.Name">${Data[i].name} ( ${Data[i].price} )</strong>
             </div>
         `;
         }else{
             html += `
             <div class="col-2 p-2 bg-danger m-1 rounded-3 text-center">
-                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
-                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name}</strong>
+                <input type="hidden" name="OrderItems[${itemCounter}].RemovedAddOns[${i}].RemoveOnIngredientId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].RemovedAddOns[${i}].Name">${Data[i].name}</strong>
             </div>
         `;
         }
@@ -341,8 +344,8 @@ function renderSize(Data, itemCounter){
     for (let i = 0; i < Data.length; i++) {
         html += `
             <div class="col-2 p-2 bg-secondary m-1 rounded-3 text-center">
-                <input type="hidden" name="OrderItems[${itemCounter}].OrderItemId" value="${Data[i].id}">
-                <strong type="text" name="OrderItems[${itemCounter}].Name">${Data[i].name} </strong>
+                <input type="hidden" name="OrderItems[${itemCounter}].SelectedSize.SizeId" value="${Data[i].id}">
+                <strong type="text" name="OrderItems[${itemCounter}].SelectedSize.Size.Name">${Data[i].name} </strong>
             </div>
         `;
     }

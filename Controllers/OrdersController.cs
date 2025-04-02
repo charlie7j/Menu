@@ -64,10 +64,7 @@ namespace Menu.Controllers
         // POST: Orders/Create
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(
-            [FromForm] int tableNumber,
-            [FromForm] string customerNote,
-            [FromForm] List<OrderItem> orderItems,Order order)
+        public IActionResult Create( Order order)
         {
 
             return RedirectToAction("Index");

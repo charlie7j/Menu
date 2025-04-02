@@ -19,10 +19,10 @@ namespace Menu.Models
         public string? ItemNote { get; set; }
     
         // قائمة المكونات الإضافية التي طلب إضافتها لهذا الصنف
-        public List<OrderItemAddOn> AddedAddOns { get; set; } = new List<OrderItemAddOn>();
+        public List<OrderItemAddOn>? AddedAddOns { get; set; } //= new List<OrderItemAddOn>();
     
         // قائمة المكونات التي طلب الزبون إزالتها من هذا الصنف
-        public List<OrderItemRemovedOn> RemovedAddOns { get; set; } = new List<OrderItemRemovedOn>();
+        public List<OrderItemRemovedOn>? RemovedAddOns { get; set; } //= new List<OrderItemRemovedOn>();
 
     }
 }

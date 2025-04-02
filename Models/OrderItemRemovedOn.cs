@@ -14,5 +14,8 @@ namespace Menu.Models
 	
 		// معرف المكون الإضافي من جدول RemoveOnIngredient
 		public int RemoveOnIngredientId { get; set; }
+
+		public string? Name {get;set;}
+
 	}
 }
