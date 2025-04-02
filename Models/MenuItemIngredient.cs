@@ -9,6 +9,8 @@ namespace Menu.Models
 	public class MenuItemIngredient
 	{
 		[Key]
+		public int MenuItemIngredientId { get; set; }
+
 		public int MenuItemId { get; set; }
 		public MenuItem? MenuItem { get; set; }
 

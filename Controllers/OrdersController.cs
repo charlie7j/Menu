@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Menu.Data;
 using Menu.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Menu.Controllers
 {
@@ -64,8 +65,14 @@ namespace Menu.Controllers
         // POST: Orders/Create
         [HttpPost("Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create( Order order)
+        public IActionResult Create(Order order)
         {
+
+            if (ModelState.IsValid)
+            {
+                _context.Add(order);
+                _context.SaveChanges();
+            }
 
             return RedirectToAction("Index");
         }

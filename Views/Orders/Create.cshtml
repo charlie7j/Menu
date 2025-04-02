@@ -250,6 +250,7 @@ function add2Order(M_id) {
                 <img src="${itemData.image}" 
                      class="img-thumbnail" 
                      style="width:80px;height:80px">
+ 
             </div>
             
             <div class="col-md-3">
@@ -321,14 +322,16 @@ function render(Data, itemCounter,t) {
             html += `
             <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center"> 
                 <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredientId" value="${Data[i].id}">
-                <strong type="text" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.Name">${Data[i].name} ( ${Data[i].price} )</strong>
+                <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.Name" value="${Data[i].name}">
+                <strong> ( ${Data[i].price} )</strong>
             </div>
         `;
         }else{
             html += `
             <div class="col-2 p-2 bg-danger m-1 rounded-3 text-center">
                 <input type="hidden" name="OrderItems[${itemCounter}].RemovedAddOns[${i}].RemoveOnIngredientId" value="${Data[i].id}">
-                <strong type="text" name="OrderItems[${itemCounter}].RemovedAddOns[${i}].Name">${Data[i].name}</strong>
+                <input type="hidden" name="OrderItems[${itemCounter}].RemovedAddOns[${i}].Name" value="${Data[i].name}">
+                <strong>${Data[i].name}</strong>
             </div>
         `;
         }
