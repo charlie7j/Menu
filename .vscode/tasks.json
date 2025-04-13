@@ -36,6 +36,20 @@
                 "${workspaceFolder}/Menu.csproj"
             ],
             "problemMatcher": "$msCompile"
+        },
+        {
+            "type": "dotnet",
+            "task": "build",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "dotnet: build"
+        },
+        {
+            "type": "dotnet",
+            "task": "build",
+            "group": "build",
+            "problemMatcher": [],
+            "label": "dotnet: build"
         }
     ]
 }

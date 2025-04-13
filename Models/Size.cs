@@ -12,7 +12,7 @@ namespace Menu.Models
 		public string? Name { get; set; } // صغير، وسط، كبير
 	
 		[NotMapped]
-		public decimal ExtraPrice {get;set;} = 0;
+		public decimal ExtraPrice {get;set;} 
 	
 	}
 }

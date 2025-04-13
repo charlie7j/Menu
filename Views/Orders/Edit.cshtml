@@ -1,0 +1,105 @@
+@model Order
+
+
+@using System.Text.Json
+@using System.Linq 
+
+@{
+    ViewData["Title"] = "تعديل الطلب";
+    Layout = "_LayoutDashboard";
+}
+
+<div class="container-fluid py-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-lg">
+                <div class="card-header bg-warning text-white">
+                    <h4 class="mb-0">
+                        <i class="bi bi-pencil-square me-2"></i>تعديل الطلب
+                    </h4>
+                </div>
+                
+                <div class="card-body">
+                    <form method="post" asp-action="Edit">
+                        <input type="hidden" name="OrderId" value="@Model.OrderId" />
+
+                        <div class="row mb-4 g-3">
+                            <div class="col-md-6">
+                                <input name="tableNumber" class="form-control" placeholder="رقم الطاولة" value="@Model.TableNumber" required>
+                            </div>
+                            <div class="col-md-6">
+                                <textarea name="customerNote" class="form-control" placeholder="ملاحظات للطلب" rows="1">@Model.CustomerNote</textarea>
+                            </div>
+                        </div> 
+
+                       
+
+ 
+ 
+                        <div class="row">
+                        @foreach (var (item, index) in Model.OrderItems.Select((item, index) => (item, index)))
+                        {
+
+                            <div class="card col-md-6">
+                                <img src="@item.MenuItem!.ImageUrl" style="max-height: 300px;" alt="">
+                                <div class="card-body">
+                                   
+                                    <h5 class="card-title">
+                                       Name : <strong> @item.MenuItem.Name</strong>
+                                    </h5>
+                                    <div class="card-text">
+                                        <div>
+                                            Quantity: 
+                                            <input type="text" value="@item.Quantity"/>
+                                        </div>
+                                        <div>
+                                            @Html.DropDownList("SelectedSize", 
+                                                new SelectList(ViewBag.Sizes as IEnumerable<Size>, "SizeId", "Name",@item!.SelectedSize.Size.SizeId),
+                                                "اختر حجمًا",
+                                                new { @class = "form-control" })
+                                        </div>
+                        
+                                        
+
+                                        @foreach (var (Subitem, Subindex) in item.AddedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
+                                        {
+                                            <p>@Subitem.AddOnIngredient.AddId</p>
+                                             <p>@Subitem.AddOnIngredient.AddOnIngredientId</p>
+                                              <p>@Subitem.AddOnIngredient.Name</p>
+                                               <p>@Subitem.AddOnIngredient.AdditionalPrice</p>
+                                                <p>@Subitem.Note</p> 
+                                        }
+
+                                        <hr/>
+
+                                        @foreach (var (Subitem, Subindex) in item.RemovedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
+                                        {
+                                            <p>@Subitem.OrderItemRemoveOnId</p>
+                                             <p>@Subitem.RemoveOnIngredientId</p>
+                                              <p>@Subitem.Name</p>
+                                        }
+
+                                        
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                        </div>
+
+                      
+                        
+                        
+                        <div class="text-center mt-5">
+                            <button type="submit" class="btn btn-success btn-lg px-5">
+                                <i class="bi bi-save me-2"></i>حفظ التعديلات
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

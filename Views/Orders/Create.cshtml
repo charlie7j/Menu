@@ -231,7 +231,7 @@ function add2Order(M_id) {
                 if (action === "add") {
                     itemData.price = parseInt(itemData.price) + parseInt(addonprice);
 
-                    alert(itemData.price);
+                     
 
                     addonsToAdd.push(addonObj);
                     
@@ -255,7 +255,8 @@ function add2Order(M_id) {
             
             <div class="col-md-3">
                 <h6>${itemData.name}</h6>
-                <small class="text-muted">${itemData.price}</small>
+                <small class="text-muted"  id="FrontPrice">${itemData.price}</small>
+                <small class="text-muted"  id="TotalFrontPrice"></small>
                 
                 <input type="hidden" 
                        name="OrderItems[${itemCounter}].MenuItemId" 
@@ -269,7 +270,8 @@ function add2Order(M_id) {
                        class="form-control" 
                        value="1" 
                        min="1" 
-                       required>
+                       required
+                       onchange="onQuantityChange(this)">
             </div>
             
             <div class="col-md-2">
@@ -313,17 +315,14 @@ function add2Order(M_id) {
 
 function render(Data, itemCounter,t) {
     let html = ""; // تخزين الكود HTML هنا
-
-
-    alert(JSON.stringify(Data));
-
+ 
     for (let i = 0; i < Data.length; i++) {
         if(t == "a"){
             html += `
             <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center"> 
                 <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredientId" value="${Data[i].id}">
                 <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.Name" value="${Data[i].name}">
-                <strong> ( ${Data[i].price} )</strong>
+                <strong>${Data[i].name} ( ${Data[i].price} )</strong>
             </div>
         `;
         }else{
@@ -372,5 +371,17 @@ function removeItem(M_id) {
         itemCounter = itemsMap.size;
     }
 }
+ 
+    function onQuantityChange(input) {
+        
+        const quantity = parseInt(input.value);
+        var p = document.getElementById("FrontPrice").textContent;
+
+        var pp = parseInt(p);
+
+        document.getElementById("TotalFrontPrice").textContent = quantity * pp;
+ 
+    }
+ 
 </script>
  

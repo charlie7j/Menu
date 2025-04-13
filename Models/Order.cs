@@ -12,6 +12,8 @@ namespace Menu.Models
         public DateTime OrderDateTime { get; set; } // تاريخ ووقت الطلب
         public string? CustomerNote { get; set; }    // ملاحظات عامة للطلب (إن وُجدت)
     
+        public double FullPrice { get; set; }
+
         // قائمة الأصناف المطلوبة ضمن الطلب
         public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
     }
