@@ -56,28 +56,40 @@
                                             @Html.DropDownList("SelectedSize", 
                                                 new SelectList(ViewBag.Sizes as IEnumerable<Size>, "SizeId", "Name",@item!.SelectedSize.Size.SizeId),
                                                 "اختر حجمًا",
-                                                new { @class = "form-control" })
+                                                new { @class = "form-select" })
                                         </div>
                         
-                                        
+                                        <div class="row">   
+                                            <h2>Add</h2>
+                                            @foreach (var (Subitem, Subindex) in item.AddedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
+                                            {
+                                                <div class="col-md-3"> 
 
-                                        @foreach (var (Subitem, Subindex) in item.AddedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
-                                        {
-                                            <p>@Subitem.AddOnIngredient.AddId</p>
-                                             <p>@Subitem.AddOnIngredient.AddOnIngredientId</p>
-                                              <p>@Subitem.AddOnIngredient.Name</p>
-                                               <p>@Subitem.AddOnIngredient.AdditionalPrice</p>
-                                                <p>@Subitem.Note</p> 
-                                        }
+                                                @* 
+                                                    @Subitem.AddOnIngredient.AddId
+                                                    @Subitem.AddOnIngredient.AddOnIngredientId 
+                                                *@
+                                                Name :  @Subitem.AddOnIngredient.Name (@Subitem.AddOnIngredient.AdditionalPrice)
+                                                
+                                                @Subitem.Note
+
+                                                </div>
+                                            }
+                                        </div>
+
+
 
                                         <hr/>
 
+                                       <div>
+                                        <h2>Remove : </h2>
                                         @foreach (var (Subitem, Subindex) in item.RemovedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
                                         {
-                                            <p>@Subitem.OrderItemRemoveOnId</p>
-                                             <p>@Subitem.RemoveOnIngredientId</p>
-                                              <p>@Subitem.Name</p>
+                                            @*<p> OrderItemRemoveOnId : @Subitem.OrderItemRemoveOnId</p>
+                                            <p>RemoveOnIngredientId : @Subitem.RemoveOnIngredientId</p>*@
+                                            <p>Name : @Subitem.Name</p>
                                         }
+                                       </div>
 
                                         
 
@@ -89,7 +101,12 @@
                         }
                         </div>
 
-                      
+                        <div class="row">
+                            <div class="col-md-6">
+                              Price :  @Model.FullPrice
+                            </div>
+                            <div class="col-md-6"></div>
+                        </div>
                         
                         
                         <div class="text-center mt-5">

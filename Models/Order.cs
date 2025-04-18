@@ -15,7 +15,7 @@ namespace Menu.Models
         public double FullPrice { get; set; }
 
         // قائمة الأصناف المطلوبة ضمن الطلب
-        public List<OrderItem> OrderItems { get; set; } = new List<OrderItem>();
+        public List<OrderItem>? OrderItems { get; set; } = new List<OrderItem>(); // مفتاح أجنبي nullable
     }
     
 }

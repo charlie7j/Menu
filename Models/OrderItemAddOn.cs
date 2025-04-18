@@ -11,7 +11,7 @@ namespace Menu.Models
         public int OrderItemAddOnId { get; set; }
     
         // معرف المكون الإضافي من جدول AddOnIngredient
-        public int AddOnIngredientId { get; set; }
+        public int? AddOnIngredientId { get; set; }
     
         // الكائن المرتبط بالمكون الإضافي (مثلاً: جبن، صلصة إضافية، الخ)
         public AddOnIngredient? AddOnIngredient { get; set; }

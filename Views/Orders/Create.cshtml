@@ -347,6 +347,7 @@ function renderSize(Data, itemCounter){
         html += `
             <div class="col-2 p-2 bg-secondary m-1 rounded-3 text-center">
                 <input type="hidden" name="OrderItems[${itemCounter}].SelectedSize.SizeId" value="${Data[i].id}">
+                <input type="hidden" name="OrderItems[${itemCounter}].SelectedSizeId" value="${Data[i].id}">
                 <strong type="text" name="OrderItems[${itemCounter}].SelectedSize.Size.Name">${Data[i].name} </strong>
             </div>
         `;

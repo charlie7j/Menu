@@ -13,7 +13,7 @@ namespace Menu.Models
 		public int OrderItemRemoveOnId { get; set; }
 	
 		// معرف المكون الإضافي من جدول RemoveOnIngredient
-		public int RemoveOnIngredientId { get; set; }
+		public int? RemoveOnIngredientId { get; set; }
 
 		public string? Name {get;set;}
 

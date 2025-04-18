@@ -13,7 +13,9 @@ namespace Menu.Models
 		public int MenuItemSizeId { get; set; }
 		//public MenuItem MenuItem { get; set; }
 		
-		public int SizeId { get; set; } 
+		public int MenuItemId { get; set;}
+
+		public int? SizeId { get; set; } // مفتاح أجنبي nullable
 		
 		public Size? Size { get; set; }
 		public decimal PriceAdjustment { get; set; } // الفرق في السعر عند اختيار الحجم

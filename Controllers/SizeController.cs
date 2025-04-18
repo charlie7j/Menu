@@ -96,14 +96,7 @@ namespace Menu.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SizeExists(size.SizeId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                     
                 }
                 return RedirectToAction("Index");
             }

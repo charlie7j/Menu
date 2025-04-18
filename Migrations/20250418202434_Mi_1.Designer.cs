@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Menu.Data.Migrations
+namespace Menu.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250405174348_AddOrderPrice")]
-    partial class AddOrderPrice
+    [Migration("20250418202434_Mi_1")]
+    partial class Mi_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,11 +21,11 @@ namespace Menu.Data.Migrations
 
             modelBuilder.Entity("Menu.Models.AddOnIngredient", b =>
                 {
-                    b.Property<int>("AddOnIngredientId")
+                    b.Property<int?>("AddOnIngredientId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AddId")
+                    b.Property<int?>("AddId")
                         .HasColumnType("INTEGER");
 
                     b.Property<decimal>("AdditionalPrice")
@@ -73,7 +73,7 @@ namespace Menu.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CategoryId")
+                    b.Property<int?>("CategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -97,14 +97,14 @@ namespace Menu.Data.Migrations
 
             modelBuilder.Entity("Menu.Models.MenuItemAddOn", b =>
                 {
-                    b.Property<int>("AddOnId")
+                    b.Property<int?>("AddOnId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
                     b.Property<int>("AddOnIngredientId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("MenuItemId")
+                    b.Property<int?>("MenuItemId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("AddOnId");
@@ -161,7 +161,7 @@ namespace Menu.Data.Migrations
                     b.Property<decimal>("PriceAdjustment")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("SizeId")
+                    b.Property<int?>("SizeId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("MenuItemSizeId");
@@ -235,7 +235,7 @@ namespace Menu.Data.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int?>("SelectedSizeMenuItemSizeId")
+                    b.Property<int?>("SelectedSizeId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("OrderItemId");
@@ -244,7 +244,7 @@ namespace Menu.Data.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.HasIndex("SelectedSizeMenuItemSizeId");
+                    b.HasIndex("SelectedSizeId");
 
                     b.ToTable("OrderItem");
                 });
@@ -255,7 +255,7 @@ namespace Menu.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("AddOnIngredientId")
+                    b.Property<int?>("AddOnIngredientId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Note")
@@ -285,7 +285,7 @@ namespace Menu.Data.Migrations
                     b.Property<int?>("OrderItemId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("RemoveOnIngredientId")
+                    b.Property<int?>("RemoveOnIngredientId")
                         .HasColumnType("INTEGER");
 
                     b.HasKey("OrderItemRemoveOnId");
@@ -314,7 +314,7 @@ namespace Menu.Data.Migrations
 
             modelBuilder.Entity("Menu.Models.Size", b =>
                 {
-                    b.Property<int>("SizeId")
+                    b.Property<int?>("SizeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -540,9 +540,7 @@ namespace Menu.Data.Migrations
                 {
                     b.HasOne("Menu.Models.Category", "Category")
                         .WithMany("MenuItems")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });
@@ -557,9 +555,7 @@ namespace Menu.Data.Migrations
 
                     b.HasOne("Menu.Models.MenuItem", "MenuItem")
                         .WithMany("MenuItemAddOns")
-                        .HasForeignKey("MenuItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MenuItemId");
 
                     b.Navigation("AddOnIngredient");
 
@@ -593,9 +589,7 @@ namespace Menu.Data.Migrations
 
                     b.HasOne("Menu.Models.Size", "Size")
                         .WithMany()
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("SizeId");
 
                     b.Navigation("Size");
                 });
@@ -631,7 +625,7 @@ namespace Menu.Data.Migrations
 
                     b.HasOne("Menu.Models.MenuItemSize", "SelectedSize")
                         .WithMany()
-                        .HasForeignKey("SelectedSizeMenuItemSizeId");
+                        .HasForeignKey("SelectedSizeId");
 
                     b.Navigation("MenuItem");
 
@@ -642,9 +636,7 @@ namespace Menu.Data.Migrations
                 {
                     b.HasOne("Menu.Models.AddOnIngredient", "AddOnIngredient")
                         .WithMany()
-                        .HasForeignKey("AddOnIngredientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AddOnIngredientId");
 
                     b.HasOne("Menu.Models.OrderItem", null)
                         .WithMany("AddedAddOns")

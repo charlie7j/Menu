@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
  
@@ -13,7 +14,12 @@ namespace Menu.Models
         public int Quantity { get; set; }
     
         // الحجم المحدد (إن وُجد)
+        public int? SelectedSizeId { get; set; }
         public MenuItemSize? SelectedSize { get; set; }
+
+        [NotMapped]
+        public List<MenuItemSize?> ListSelectedSize { get; set; } = new List<MenuItemSize?>();
+
     
         // ملاحظة خاصة بهذا الصنف (مثلاً: "بدون مخلل، مع إضافة جبن")
         public string? ItemNote { get; set; }

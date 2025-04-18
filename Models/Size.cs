@@ -8,7 +8,7 @@ namespace Menu.Models
 {
 	public class Size
 	{
-		public int SizeId { get; set; }
+		public int? SizeId { get; set; }
 		public string? Name { get; set; } // صغير، وسط، كبير
 	
 		[NotMapped]
