@@ -67,20 +67,20 @@ namespace Menu.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Order orders)
         {
-           
-            foreach (var item in orders.OrderItems!)             
+
+            foreach (var item in orders.OrderItems!)
             {
 
-                var Sub_SelectedSize = 
-                        _context.MenuItemSize!.FirstOrDefault(x=>x.MenuItemSizeId == item.SelectedSizeId);   
+                var Sub_SelectedSize =
+                        _context.MenuItemSize!.FirstOrDefault(x => x.MenuItemSizeId == item.SelectedSizeId);
 
                 item.SelectedSize = Sub_SelectedSize;
 
                 item.SelectedSize!.Size =
-                        _context.Size!.FirstOrDefault(x=>x.SizeId == Sub_SelectedSize!.SizeId);
-            
-                item.MenuItem = 
-                        _context.MenuItem!.FirstOrDefault(x=>x.MenuItemId == item.MenuItemId);
+                        _context.Size!.FirstOrDefault(x => x.SizeId == Sub_SelectedSize!.SizeId);
+
+                item.MenuItem =
+                        _context.MenuItem!.FirstOrDefault(x => x.MenuItemId == item.MenuItemId);
 
             }
 
@@ -104,18 +104,30 @@ namespace Menu.Controllers
             if (id == null) return NotFound();
 
             var order = _context!.Order!
-                .Include(o => o.OrderItems)!
-                    .ThenInclude(oi => oi.AddedAddOns)!
-                        .ThenInclude(oi => oi.AddOnIngredient)!
-                .Include(o => o.OrderItems)!
-                    .ThenInclude(oi => oi.MenuItem)!
-                        .ThenInclude(oi => oi!.Category)
-                .Include(o => o.OrderItems)!
-                    .ThenInclude(oi => oi.RemovedAddOns)!
-                .Include(o => o.OrderItems)!
-                    .ThenInclude(oi => oi.SelectedSize)
-                        .ThenInclude(oi => oi!.Size)
-                .SingleOrDefault(o => o.OrderId == id);
+                 .Include(o => o.OrderItems)!
+                     .ThenInclude(oi => oi.AddedAddOns)!
+                         .ThenInclude(oi => oi.AddOnIngredient)!
+                 .Include(o => o.OrderItems)!
+                     .ThenInclude(oi => oi.MenuItem)!
+                         .ThenInclude(oi => oi!.Category)
+                 .Include(o => o.OrderItems)!
+                     .ThenInclude(oi => oi.RemovedAddOns)!
+                 .Include(o => o.OrderItems)!
+                     .ThenInclude(oi => oi.SelectedSize)
+                         .ThenInclude(oi => oi!.Size)
+                 .SingleOrDefault(o => o.OrderId == id);
+
+
+
+            foreach (var item in order!.OrderItems!)
+            {
+                item.ListSelectedSize = _context.MenuItemSize
+                    .Include(x => x.Size)
+                    .Where(o => o.MenuItemId == item.MenuItemId)
+                        .ToList();
+            }
+
+
 
 
             ViewBag.Ingredient = _context.MenuItemIngredient!
@@ -125,8 +137,8 @@ namespace Menu.Controllers
                  .Include(ms=>ms.Size).ToList();*/
 
             ViewBag.Sizes = _context.MenuItemSize!
-                //.Where(o => o.MenuItemId > order!.OrderItems!.FirstOrDefault()!.MenuItemId)
-                    .Include(ms => ms.Size) 
+                    //.Where(o => o.MenuItemId > order!.OrderItems!.FirstOrDefault()!.MenuItemId)
+                    .Include(ms => ms.Size)
                     .Select(ms => ms.Size) // إذا كنت تريد الخصائص من جدول Size فقط
                     .ToList();
 
