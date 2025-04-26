@@ -10,17 +10,7 @@ public class ApplicationDbContext : IdentityDbContext
 		: base(options)
 	{
 	}
-
-	protected override void OnModelCreating(ModelBuilder modelBuilder)
-	{
-		modelBuilder.Entity<MenuItemSize>()
-			.HasKey(ms => new { ms.MenuItemId, ms.SizeId });
-
-		 
-	}
-
-
-
+ 
 	public DbSet<AddOnIngredient>? AddOnIngredient { get; set; }
 	public DbSet<Category>? Category { get; set; }
 	public DbSet<Ingredient>? Ingredient { get; set; }

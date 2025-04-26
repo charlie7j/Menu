@@ -77,10 +77,10 @@
                                                                         <div class="col-3">@addons.Ingredient.Name</div>
                                                                         <div class="col-3">@addons.ExtraPrice</div>
                                                                         <div class="col-3">
-                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-danger rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-action="remove">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-danger rounded-circle" data-addon-id="@addons.MenuItemIngredientId" data-addon-name="@addons.Ingredient.Name" data-action="remove">
                                                                         </div>
                                                                         <div class="col-3">
-                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-success rounded-circle" data-addon-id="@addons.IngredientId" data-addon-name="@addons.Ingredient.Name" data-addon-price="@addons.ExtraPrice" data-action="add">
+                                                                            <input type="checkbox" class="form-check-input addon-checkbox border-2 border-success rounded-circle" data-addon-id="@addons.MenuItemIngredientId" data-addon-name="@addons.Ingredient.Name" data-addon-price="@addons.ExtraPrice" data-action="add">
                                                                         </div>
                                                                     }
                                                                 </div>
@@ -322,6 +322,7 @@ function render(Data, itemCounter,t) {
             <div class="col-2 p-2 bg-primary m-1 rounded-3 text-center"> 
                 <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredientId" value="${Data[i].id}">
                 <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.Name" value="${Data[i].name}">
+                <input type="hidden" name="OrderItems[${itemCounter}].AddedAddOns[${i}].AddOnIngredient.AddId" value="${Data[i].id}">
                 <strong>${Data[i].name} ( ${Data[i].price} )</strong>
             </div>
         `;

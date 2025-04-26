@@ -55,7 +55,8 @@ namespace Menu.Controllers
             var menu = _context.MenuItem!
                 .Include(x => x.Category)
                 .Include(c => c.MenuItemSize)!.ThenInclude(c => c.Size)
-                .Include(v => v.MenuItemIngredients).ThenInclude(l => l.Ingredient).ToList();
+                .Include(v => v.MenuItemIngredients).ThenInclude(l => l.Ingredient)
+                .ToList();
 
             ViewBag.MenuItems = menu;
 
@@ -68,24 +69,45 @@ namespace Menu.Controllers
         public IActionResult Create(Order orders)
         {
 
+            var fullPrice = 0.0;
+
             foreach (var item in orders.OrderItems!)
             {
 
                 var Sub_SelectedSize =
-                        _context.MenuItemSize!.FirstOrDefault(x => x.MenuItemSizeId == item.SelectedSizeId);
+                    _context.MenuItemSize!
+                        .FirstOrDefault
+                            (x => x.MenuItemSizeId == item.SelectedSizeId);
 
                 item.SelectedSize = Sub_SelectedSize;
 
                 item.SelectedSize!.Size =
-                        _context.Size!.FirstOrDefault(x => x.SizeId == Sub_SelectedSize!.SizeId);
+                    _context.Size!
+                        .FirstOrDefault
+                            (x => x.SizeId == Sub_SelectedSize!.SizeId);
 
                 item.MenuItem =
-                        _context.MenuItem!.FirstOrDefault(x => x.MenuItemId == item.MenuItemId);
+                    _context.MenuItem!.Include(x => x.MenuItemIngredients)
+                        .FirstOrDefault
+                            (x => x.MenuItemId == item.MenuItemId);
+
+
+                fullPrice += (double)item.SelectedSize.PriceAdjustment * item.Quantity;
+
+                item.MenuItem!.MenuItemIngredients.ForEach(x =>
+                {
+                    fullPrice += (double)x.ExtraPrice * item.Quantity;
+                });
+
+
+                item!.AddedAddOns!.ForEach(x =>
+                {
+                    x.AddOnIngredient!.MenuItemIngredientId = x.AddOnIngredientId;
+                });
 
             }
 
-
-
+            orders.FullPrice = fullPrice;
 
             // إضافة الطلب إلى قاعدة البيانات
             _context.Order!.Add(orders);
@@ -104,44 +126,34 @@ namespace Menu.Controllers
             if (id == null) return NotFound();
 
             var order = _context!.Order!
-                 .Include(o => o.OrderItems)!
-                     .ThenInclude(oi => oi.AddedAddOns)!
-                         .ThenInclude(oi => oi.AddOnIngredient)!
-                 .Include(o => o.OrderItems)!
-                     .ThenInclude(oi => oi.MenuItem)!
-                         .ThenInclude(oi => oi!.Category)
-                 .Include(o => o.OrderItems)!
-                     .ThenInclude(oi => oi.RemovedAddOns)!
-                 .Include(o => o.OrderItems)!
-                     .ThenInclude(oi => oi.SelectedSize)
-                         .ThenInclude(oi => oi!.Size)
-                 .SingleOrDefault(o => o.OrderId == id);
+                .Include(o => o.OrderItems)!
+                    .ThenInclude(oi => oi.AddedAddOns)!
+                        .ThenInclude(aao => aao.AddOnIngredient)  // Fixed parameter name
+                            .ThenInclude(adi => adi!.MenuItemIngredient) // Now works!  // Fixed parameter name
+                .Include(o => o.OrderItems)!
+                    .ThenInclude(oi => oi.MenuItem)!
+                        .ThenInclude(oi => oi!.Category)
+                .Include(o => o.OrderItems)!
+                    .ThenInclude(oi => oi.RemovedAddOns)!
+                .Include(o => o.OrderItems)!
+                    .ThenInclude(oi => oi.SelectedSize)
+                        .ThenInclude(oi => oi!.Size)
+                .SingleOrDefault(o => o.OrderId == id);
 
 
 
             foreach (var item in order!.OrderItems!)
             {
-                item.ListSelectedSize = _context.MenuItemSize
-                    .Include(x => x.Size)
-                    .Where(o => o.MenuItemId == item.MenuItemId)
-                        .ToList();
-            }
+#pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
 
- 
+                item.ListSelectedSize = _context.MenuItemSize!.Include(x => x.Size)!.Where(o => o.MenuItemId == item.MenuItemId)!.ToList();
+
+#pragma warning restore CS8619 // Nullability of reference types in value doesn't match target type.
+            }
 
 
             ViewBag.Ingredient = _context.MenuItemIngredient!
                 .Include(mi => mi.Ingredient);
-
-            /* ViewBag.Sizes = _context.MenuItemSize!
-                 .Include(ms=>ms.Size).ToList();*/
-
-            ViewBag.Sizes = _context.MenuItemSize!
-                    //.Where(o => o.MenuItemId > order!.OrderItems!.FirstOrDefault()!.MenuItemId)
-                    .Include(ms => ms.Size)
-                    .Select(ms => ms.Size) // إذا كنت تريد الخصائص من جدول Size فقط
-                    .ToList();
-
 
             return View(order);
         }
@@ -151,20 +163,7 @@ namespace Menu.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int id, Order order)
         {
-            /*if (id != order.OrderId) return NotFound();
 
-            if (!ModelState.IsValid) return View(order);
-
-            try
-            {
-                _context.Update(order);
-                _context.SaveChanges();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!OrderExists(order.OrderId)) return NotFound();
-                throw;
-            }*/
             return RedirectToAction("Index");
         }
 

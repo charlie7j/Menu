@@ -80,6 +80,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\0b6d1a2f-152a-4e0d-97ca-cd1623575e0c_map-location.png))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Menu</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Menu</BasePath>
+      <RelativePath>images/menuItems/42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\49affa91-f7a6-495e-9344-50541973d3b3_Desert.jpg))">
       <SourceType>Package</SourceType>
       <SourceId>Menu</SourceId>
@@ -111,6 +127,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\5c5f752b-2d18-4556-9e92-d4c365927a12_Untitled.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Menu</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Menu</BasePath>
+      <RelativePath>images/menuItems/5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\6741bef7-b23d-488a-bdf3-f8b7927bebc9_gps-navigation.png))">
       <SourceType>Package</SourceType>
@@ -160,6 +192,22 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\b2589c9a-6031-482b-939e-1c721a1e9cae_Untitled.jpeg))</OriginalItemSpec>
     </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Menu</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Menu</BasePath>
+      <RelativePath>images/menuItems/c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png))</OriginalItemSpec>
+    </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\d5c7a38c-4f54-4d0c-9814-99ed2a6c6a77_Untitled1.jpeg))">
       <SourceType>Package</SourceType>
       <SourceId>Menu</SourceId>
@@ -191,6 +239,22 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\ee554b0b-8b33-4c81-bd90-61b2ef6254b7_Untitled.jpeg))</OriginalItemSpec>
+    </StaticWebAsset>
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png))">
+      <SourceType>Package</SourceType>
+      <SourceId>Menu</SourceId>
+      <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
+      <BasePath>_content/Menu</BasePath>
+      <RelativePath>images/menuItems/ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png</RelativePath>
+      <AssetKind>All</AssetKind>
+      <AssetMode>All</AssetMode>
+      <AssetRole>Primary</AssetRole>
+      <RelatedAsset></RelatedAsset>
+      <AssetTraitName></AssetTraitName>
+      <AssetTraitValue></AssetTraitValue>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images\menuItems\ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\images4site\restaurant.png))">
       <SourceType>Package</SourceType>

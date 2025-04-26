@@ -24,7 +24,7 @@ namespace Menu.Models
 		public List<Ingredient> SelectedIngredients {get;set;} = new List<Ingredient>();
 		
 		
-		public ICollection<MenuItemTag>? MenuItemTags { get; set; } // علاقة مع Tags
+		public List<MenuItemTag>? MenuItemTags { get; set; } // علاقة مع Tags
 		
 		
 		// قائمة الأحجام المتاحة لهذا الصنف (اختياريًا)
@@ -34,7 +34,7 @@ namespace Menu.Models
 		public List<Size> SelectedSize { get; set; } = new List<Size>();
 
  		// قائمة المكونات الإضافية التي يمكن إضافتها لهذا الصنف
-		public ICollection<MenuItemAddOn>? MenuItemAddOns { get; set; }
+		public List<MenuItemAddOn>? MenuItemAddOns { get; set; }
 		
 		/*public MenuItem()
 		{

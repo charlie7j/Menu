@@ -1,10 +1,10 @@
-
 @model IEnumerable<Order>
 
 @{
     ViewData["Title"] = "قائمة الطلبات";
     Layout = "_LayoutDashboard";
 }
+
 
 <div class="container-fluid py-4">
     <div class="row">
@@ -57,3 +57,655 @@
         </div>
     </div>
 </div>
+
+
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .btn-create {
+        background-color: #ff5b7d;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 15px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .btn-create i {
+        font-size: 18px;
+    }
+
+    .nav-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .nav-buttons button {
+        background-color: #6c7dfa;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 10px 15px;
+        cursor: pointer;
+    }
+
+    .month-display {
+        font-size: 24px;
+        font-weight: bold;
+        color: #555;
+    }
+
+    .view-buttons {
+        display: flex;
+        gap: 10px;
+    }
+
+    .view-buttons button {
+        background-color: #6c7dfa;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        padding: 8px 15px;
+        cursor: pointer;
+    }
+
+    .sidebar {
+        width: 250px;
+        float: right;
+        margin-left: 20px;
+    }
+
+    .info-text {
+        margin-bottom: 20px;
+        color: #666;
+    }
+
+    .event-types {
+        display: flex;
+        gap: 10px;
+
+
+    }
+
+    .event-type {
+        display: flex;
+        align-items: center;
+        padding: 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        width: 250px;
+    }
+
+    .event-type-circle {
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        margin-left: 10px;
+    }
+
+    .help-section {
+        margin-top: 40px;
+        color: #666;
+        font-weight: bold;
+    }
+
+    .tables-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        border-collapse: collapse;
+    }
+
+    .grid-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        text-align: center;
+        font-weight: bold;
+        border: 1px solid #ddd;
+    }
+
+    .table-cell {
+        min-height: 100px;
+        border: 1px dashed #ddd;
+        padding: 5px;
+        position: relative;
+    }
+
+    .table-number {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        color: #888;
+    }
+
+    .order-item {
+        border-radius: 4px;
+        padding: 8px;
+        margin-bottom: 5px;
+        cursor: grab;
+        font-size: 14px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .order-item.dragging {
+        opacity: 1;
+        border: 1px solid rgb(65, 65, 65);
+        height: 100%;
+    }
+
+    .order-actions {
+        display: flex;
+        gap: 5px;
+    }
+
+    .order-actions button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        padding: 0;
+        color: #555;
+    }
+
+    .status-free {
+        background-color: #fbfbfba8;
+    }
+
+    .status-reserved {
+        background-color: #fbacbd;
+    }
+
+    .status-occupied {
+        background-color: #f7edb9;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 100;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        width: 400px;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .modal-title {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .close-modal {
+        background: none;
+        border: none;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .modal-footer {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        padding: 8px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .btn-save {
+        background-color: #4caf50;
+        color: white;
+    }
+
+    .btn-cancel {
+        background-color: #f44336;
+        color: white;
+    }
+
+    .order-details-modal-content {
+        padding: 20px;
+    }
+
+    .order-details-modal-content p {
+        margin-bottom: 10px;
+    }
+</style>
+
+
+
+
+
+<div class="container shadow-lg bg-white py-4 rounded-3">
+    <div class="header">
+        <button class="btn-create" onclick="openNewOrderModal()">
+            <span>+</span> إنشاء طلب جديد
+        </button>
+
+        <div class="event-types" style="padding-right: 20px;">
+            <div class="event-type" style="background-color: #e0fff0;">
+                <div class="event-type-circle" style="background-color: #1de9b6;"></div>
+                <span>طاولة مشغولة</span>
+            </div>
+            <div class="event-type" style="background-color: #e0e8ff;">
+                <div class="event-type-circle" style="background-color: #4285f4;"></div>
+                <span>طلب جديد</span>
+            </div>
+            <div class="event-type" style="background-color: #ffecf0;">
+                <div class="event-type-circle" style="background-color: #ff5b7d;"></div>
+                <span>طاولة محجوزة</span>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="content-wrapper">
+        <div class="sidebar" style="overflow-y: scroll;height: 500px;overflow-x: hidden;">
+            <div class="orders-list" style="padding-right: 30px;">
+                @foreach (var item in Model)
+                {
+                    <div class="order-item row" draggable="true" ondragstart="drag(event)" id="order-@item.OrderId"
+                        style="background-color: #f0f0f0;">
+                        <div class="col-md-10">#Order :@item.OrderId</div>
+                        <div class="order-actions col-md-2">
+                            <button title="تفاصيل" onclick="showOrderDetails('order-@item.OrderId')">👁️</button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="tables-container">
+            <div class="tables-grid">
+                @for (int i = 1; i < 31; i++)
+                {
+                    <div class="table-cell status-free" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="showTableDetailsModal(@i)">
+                          <!----!> 
+                        <div class="table-number">@i</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="orderModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title">طلب جديد</div>
+            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
+        </div>
+        <div class="form-group">
+            <label>رقم الطلب</label>
+            <input type="text" id="orderNumber">
+        </div>
+        <div class="form-group">
+            <label>وصف الطلب</label>
+            <input type="text" id="orderDescription">
+        </div>
+        <div class="form-group">
+            <label>رقم الطاولة</label>
+            <select id="tableNumber">
+                <option value="">اختر طاولة</option>
+                @for (int i = 1; i < 31; i++)
+                {
+                    <option value="@i">طاولة @i</option>
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label>الحالة الأولية للطاولة</label>
+            <select id="initialTableStatus">
+                <option value="occupied">مشغولة</option>
+                <option value="reserved">محجوزة</option>
+                <option value="free">شاغرة</option>
+            </select>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel" onclick="closeOrderModal()">إلغاء</button>
+            <button class="modal-btn btn-save" onclick="saveNewOrder()">حفظ</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="tableDetailsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-title" id="tableDetailsTitle">تفاصيل الطاولة</div>
+            <button class="close-modal" onclick="closeTableDetailsModal()">&times;</button>
+        </div>
+        <div class="form-group">
+            <label>رقم الطاولة</label>
+            <input type="text" id="detailsTableNumber" readonly style="border:none">
+        </div>
+        <div class="form-group">
+            <label>الحالة</label>
+            <select id="detailsTableStatus" onchange="updateTableStatusFromDetails()">
+                <option value="free">شاغرة</option>
+                <option value="reserved">محجوزة</option>
+                <option value="occupied">مشغولة</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>الطلبات الحالية</label>
+            <div id="currentOrders">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel" onclick="closeTableDetailsModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="orderDetailsModal">
+    <div class="modal-content order-details-modal-content">
+        <div class="modal-header">
+            <div class="modal-title">تفاصيل الطلب</div>
+            <button class="close-modal" onclick="closeOrderDetailsModal()">&times;</button>
+        </div>
+        <div id="orderDetailsContent">
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn btn-cancel" onclick="closeOrderDetailsModal()">إغلاق</button>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script>
+    let currentOrdersData = []; // لتخزين بيانات الطلبات
+
+    // وظائف السحب والإفلات
+    function allowDrop(ev) {
+        ev.preventDefault();
+    }
+
+    function drag(ev) {
+        ev.dataTransfer.setData("text", ev.target.id);
+        ev.target.classList.add("dragging");
+    }
+
+    
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var draggedElement = document.getElementById(data);
+    draggedElement.classList.remove("dragging");
+
+    const targetTable = ev.currentTarget;
+    const previousParent = draggedElement.parentElement;
+
+    // إذا كان العنصر قادماً من طاولة أخرى أو قائمة الطلبات
+    if (previousParent) {
+        if (previousParent.classList.contains("table-cell")) {
+            previousParent.removeChild(draggedElement);
+            if (previousParent.querySelectorAll(".order-item").length === 0) {
+                updateTableStatusElement(previousParent, "free");
+            }
+        } else if (previousParent.classList.contains("orders-list")) {
+            previousParent.removeChild(draggedElement);
+        }
+
+        // إضافة العنصر المسحوب إلى الطاولة الهدف (سيتم تحديث الأزرار في addOrderToTable)
+        addOrderToTable(targetTable, draggedElement.querySelector('.col-md-10').innerText, draggedElement.id);
+        updateTableStatusElement(targetTable, "occupied");
+    }
+}
+
+ 
+ // إضافة طلب إلى خلية الجدول
+    function addOrderToTable(tableCell, orderText, orderId) {
+        let orderItem = tableCell.querySelector(`#${orderId}`);
+
+        if (!orderItem) {
+            // إنشاء عنصر طلب جديد إذا لم يكن موجودًا
+            orderItem = document.createElement("div");
+            orderItem.className = "order-item row";
+            orderItem.draggable = true;
+            orderItem.id = orderId;
+            orderItem.innerHTML = `<div class="col-md-10">${orderText}</div>`; // إنشاء الجزء النصي فقط في البداية
+            orderItem.addEventListener("dragstart", drag);
+            tableCell.appendChild(orderItem);
+        }
+
+        // التحقق مما إذا كانت أزرار الإجراءات موجودة بالفعل
+        const orderActions = orderItem.querySelector(".order-actions");
+        if (!orderActions) {
+            // إضافة أزرار الإجراءات إذا لم تكن موجودة
+            const actionsDiv = document.createElement("div");
+            actionsDiv.className = "order-actions col-md-2";
+            actionsDiv.innerHTML = `<button title="تفاصيل" onclick="showOrderDetails('${orderId}')">👁️</button><button title="إلغاء" onclick="cancelOrder(this.parentNode.parentNode)">🗑️</button><button title="للدفع" onclick="moveToPayment(this.parentNode.parentNode)">💰</button>`;
+            orderItem.appendChild(actionsDiv);
+        }
+    }
+
+    // وظيفة تحديث حالة عنصر الطاولة المرئية
+    function updateTableStatusElement(tableCell, status) {
+        if (!tableCell) return;
+        tableCell.classList.remove("status-free", "status-reserved", "status-occupied");
+        tableCell.classList.add(`status-${status}`);
+    }
+
+    // وظائف النافذة المنبثقة (Modal) الخاصة بإنشاء طلب جديد
+    function openNewOrderModal() {
+        document.getElementById("orderModal").style.display = "flex";
+    }
+
+    function closeOrderModal() {
+        document.getElementById("orderModal").style.display = "none";
+        resetNewOrderForm();
+    }
+
+    function resetNewOrderForm() {
+        document.getElementById("orderNumber").value = "";
+        document.getElementById("orderDescription").value = "";
+        document.getElementById("tableNumber").value = "";
+        document.getElementById("initialTableStatus").value = "occupied";
+    }
+
+    function saveNewOrder() {
+        const orderNumber = document.getElementById("orderNumber").value;
+        const orderDescription = document.getElementById("orderDescription").value;
+        const tableNumber = document.getElementById("tableNumber").value;
+        const initialTableStatus = document.getElementById("initialTableStatus").value;
+
+        if (!orderNumber || !orderDescription) {
+            alert("يرجى ملء جميع الحقول المطلوبة");
+            return;
+        }
+
+        const newOrderId = "order" + (Math.floor(Math.random() * 1000) + 100);
+        const orderText = `طلب #${orderNumber} - ${orderDescription}`;
+
+        if (tableNumber) {
+            const tableCells = document.querySelectorAll(".table-cell");
+            for (const cell of tableCells) {
+                const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
+                if (cellNumber === parseInt(tableNumber)) {
+                    addOrderToTable(cell, orderText, newOrderId);
+                    updateTableStatusElement(cell, initialTableStatus);
+                    break;
+                }
+            }
+        } else {
+            const newOrderItem = document.createElement("div");
+            newOrderItem.className = "order-item";
+            newOrderItem.draggable = true;
+            newOrderItem.id = newOrderId;
+            newOrderItem.innerHTML = `<span>${orderText}</span><div class="order-actions"><button title="تفاصيل" onclick="showOrderDetails('${newOrderId}')">👁️</button></div>`;
+            newOrderItem.addEventListener("dragstart", drag);
+            document.querySelector(".orders-list").appendChild(newOrderItem);
+        }
+
+        closeOrderModal();
+    }
+
+    // وظائف النافذة المنبثقة (Modal) الخاصة بتفاصيل الطاولة
+    function showTableDetailsModal(tableNumber) {
+        const modal = document.getElementById("tableDetailsModal");
+        const title = document.getElementById("tableDetailsTitle");
+        const tableNumberInput = document.getElementById("detailsTableNumber");
+        const tableStatusSelect = document.getElementById("detailsTableStatus");
+        const currentOrdersDiv = document.getElementById("currentOrders");
+
+        const tableCells = document.querySelectorAll(".table-cell");
+        let targetCell;
+        for (const cell of tableCells) {
+            const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
+            if (cellNumber === tableNumber) {
+                targetCell = cell;
+                break;
+            }
+        }
+
+        if (!targetCell) return;
+
+        title.innerText = `تفاصيل الطاولة ${tableNumber}`;
+        tableNumberInput.value = tableNumber;
+        tableStatusSelect.value = targetCell.classList.contains("status-free") ? "free" :
+            targetCell.classList.contains("status-reserved") ? "reserved" : "occupied";
+
+        currentOrdersDiv.innerHTML = "";
+        const orders = targetCell.querySelectorAll(".order-item");
+        if (orders.length === 0) {
+            currentOrdersDiv.innerHTML = "<p>لا توجد طلبات حالية</p>";
+        } else {
+            orders.forEach(order => {
+                const orderDiv = document.createElement("div");
+                orderDiv.className = "order-item";
+                orderDiv.innerHTML = order.innerHTML; // نقل محتوى الطلب بالكامل
+                currentOrdersDiv.appendChild(orderDiv);
+            });
+        }
+
+        modal.style.display = "flex";
+        modal.dataset.tableNumber = tableNumber;
+    }
+
+    function closeTableDetailsModal() {
+        document.getElementById("tableDetailsModal").style.display = "none";
+    }
+
+    function updateTableStatusFromDetails() {
+        const modal = document.getElementById("tableDetailsModal");
+        const tableNumber = modal.dataset.tableNumber;
+        const newStatus = document.getElementById("detailsTableStatus").value;
+
+        const tableCells = document.querySelectorAll(".table-cell");
+        for (const cell of tableCells) {
+            const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
+            if (cellNumber === parseInt(tableNumber)) {
+                updateTableStatusElement(cell, newStatus);
+                break;
+            }
+        }
+    }
+
+    // وظائف التعامل مع الطلبات داخل الطاولة
+    function showOrderOptions(orderItem) {
+        // يمكنك هنا عرض قائمة خيارات مثل إلغاء، تحويل للدفع، تفاصيل
+        alert(`خيارات الطلب: ${orderItem.querySelector('span').innerText}`);
+    }
+
+    function cancelOrder(orderItemElement) {
+        const tableCell = orderItemElement.parentNode;
+        if (confirm(`هل أنت متأكد من إلغاء الطلب: ${orderItemElement.querySelector('span').innerText}؟`)) {
+            orderItemElement.remove();
+            if (tableCell.querySelectorAll(".order-item").length === 0) {
+                updateTableStatusElement(tableCell, "free");
+            }
+        }
+    }
+
+    function moveToPayment(orderItemElement) {
+        alert(`تم تحويل الطلب: ${orderItemElement.querySelector('span').innerText} للدفع.`);
+        const tableCell = orderItemElement.parentNode;
+        orderItemElement.remove();
+        if (tableCell.querySelectorAll(".order-item").length === 0) {
+            updateTableStatusElement(tableCell, "free");
+        }
+        // يمكنك هنا إضافة منطق لنقل الطلب إلى نظام الدفع
+    }
+
+    // وظيفة عرض تفاصيل الطلب
+    function showOrderDetails(orderId) {
+
+        alert("kkk");
+
+        const modal = document.getElementById("orderDetailsModal");
+        const contentDiv = document.getElementById("orderDetailsContent");
+        const orderElement = document.getElementById(orderId);
+
+        if (orderElement) {
+            contentDiv.innerHTML = `<p><b>رقم الطلب:</b> ${orderId.replace('order', '')}</p><p><b>الوصف:</b> ${orderElement.querySelector('span').innerText.split(' - ')[1] || 'لا يوجد وصف'}</p>`;
+            modal.style.display = "flex";
+        }
+    }
+
+    function closeOrderDetailsModal() {
+        document.getElementById("orderDetailsModal").style.display = "none";
+    }
+</script>

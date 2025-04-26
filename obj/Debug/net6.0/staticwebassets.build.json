@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "GQuLQ5tRTtYspOQmy5qgeIru92/coVZnBtrp48O2bZc=",
+  "Hash": "p5EGgI2yxWIyz+qnmFtjU5lN3egaKQ4RROX2zVA94wE=",
   "Source": "Menu",
   "BasePath": "_content/Menu",
   "Mode": "Default",
@@ -1290,6 +1290,25 @@
       "OriginalItemSpec": "wwwroot/images/menuItems/0b6d1a2f-152a-4e0d-97ca-cd1623575e0c_map-location.png"
     },
     {
+      "Identity": "/workspaces/Menu/wwwroot/images/menuItems/42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "images/menuItems/42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/menuItems/42afcfef-d7d3-446e-8b3b-44cf553412af_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png"
+    },
+    {
       "Identity": "/workspaces/Menu/wwwroot/images/menuItems/49affa91-f7a6-495e-9344-50541973d3b3_Desert.jpg",
       "SourceId": "Menu",
       "SourceType": "Discovered",
@@ -1326,6 +1345,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/menuItems/5c5f752b-2d18-4556-9e92-d4c365927a12_Untitled.jpeg"
+    },
+    {
+      "Identity": "/workspaces/Menu/wwwroot/images/menuItems/5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "images/menuItems/5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/menuItems/5fa7f5f9-7aef-41d2-a62e-3bdb6a5273f1_Calendar Hyper - Responsive Bootstrap 5 Admin Dashboard.png"
     },
     {
       "Identity": "/workspaces/Menu/wwwroot/images/menuItems/6741bef7-b23d-488a-bdf3-f8b7927bebc9_gps-navigation.png",
@@ -1385,6 +1423,25 @@
       "OriginalItemSpec": "wwwroot/images/menuItems/b2589c9a-6031-482b-939e-1c721a1e9cae_Untitled.jpeg"
     },
     {
+      "Identity": "/workspaces/Menu/wwwroot/images/menuItems/c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "images/menuItems/c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/menuItems/c141949c-4864-4165-8083-2ac8c01ca40e_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code(1).png"
+    },
+    {
       "Identity": "/workspaces/Menu/wwwroot/images/menuItems/d5c7a38c-4f54-4d0c-9814-99ed2a6c6a77_Untitled1.jpeg",
       "SourceId": "Menu",
       "SourceType": "Discovered",
@@ -1421,6 +1478,25 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot/images/menuItems/ee554b0b-8b33-4c81-bd90-61b2ef6254b7_Untitled.jpeg"
+    },
+    {
+      "Identity": "/workspaces/Menu/wwwroot/images/menuItems/ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png",
+      "SourceId": "Menu",
+      "SourceType": "Discovered",
+      "ContentRoot": "/workspaces/Menu/wwwroot/",
+      "BasePath": "_content/Menu",
+      "RelativePath": "images/menuItems/ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/images/menuItems/ffe8c987-7607-4088-909e-68d527d18301_OrdersController.cs - Menu [Codespaces scaling waddle] - Visual Studio Code.png"
     },
     {
       "Identity": "/workspaces/Menu/wwwroot/images4site/restaurant.png",

@@ -1,118 +1,169 @@
 @model Order
 
-
 @using System.Text.Json
-@using System.Linq 
+@using System.Linq
 
 @{
     ViewData["Title"] = "تعديل الطلب";
     Layout = "_LayoutDashboard";
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4" dir="rtl">
     <div class="row">
         <div class="col-12">
             <div class="card shadow-lg">
                 <div class="card-header bg-warning text-white">
-                    <h4 class="mb-0">
-                        <i class="bi bi-pencil-square me-2"></i>تعديل الطلب
-                    </h4>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h4 class="mb-0">
+                            <i class="bi bi-pencil-square me-2"></i>تعديل الطلب
+                        </h4>
+                        <a href="@Url.Action("Index")" class="btn btn-light btn-sm">
+                            <i class="bi bi-arrow-right"></i> العودة
+                        </a>
+                    </div>
                 </div>
-                
+
                 <div class="card-body">
-                    <form method="post" asp-action="Edit">
+                    <form method="post" asp-action="Edit" id="orderEditForm">
                         <input type="hidden" name="OrderId" value="@Model.OrderId" />
 
                         <div class="row mb-4 g-3">
                             <div class="col-md-6">
-                                <input name="tableNumber" class="form-control" placeholder="رقم الطاولة" value="@Model.TableNumber" required>
+                                <label class="form-label fw-bold">رقم الطاولة</label>
+                                <input name="tableNumber" class="form-control" placeholder="رقم الطاولة"
+                                    value="@Model.TableNumber" required>
                             </div>
                             <div class="col-md-6">
-                                <textarea name="customerNote" class="form-control" placeholder="ملاحظات للطلب" rows="1">@Model.CustomerNote</textarea>
+                                <label class="form-label fw-bold">ملاحظات الطلب</label>
+                                <textarea name="customerNote" class="form-control" placeholder="ملاحظات للطلب"
+                                    rows="1">@Model.CustomerNote</textarea>
                             </div>
-                        </div> 
+                        </div>
 
-                       
+                        <hr class="my-4">
+                        <h5 class="mb-3 text-center fw-bold">عناصر الطلب</h5>
 
- 
- 
-                        <div class="row">
-                        @foreach (var (item, index) in Model.OrderItems.Select((item, index) => (item, index)))
-                        {
-
-                            <div class="card col-md-6">
-                                <img src="@item.MenuItem!.ImageUrl" style="max-height: 300px;" alt="">
-                                <div class="card-body">
-                                   
-                                    <h5 class="card-title">
-                                       Name : <strong> @item.MenuItem.Name</strong>
-                                    </h5>
-                                    <div class="card-text">
-                                        <div>
-                                            Quantity: 
-                                            <input type="text" value="@item.Quantity"/>
+                        <div class="row g-4">
+                            @foreach (var (item, index) in Model.OrderItems!.Select((item, index) => (item, index)))
+                            {
+                                <div class="col-md-6 mb-4">
+                                    <div class="card h-100 border-warning">
+                                        <div class="position-relative">
+                                            <img src="@item.MenuItem!.ImageUrl" class="card-img-top" style="height: 200px; object-fit: cover;" alt="@item.MenuItem.Name">
+                                            <span class="position-absolute top-0 end-0 bg-warning text-dark px-2 py-1 m-2 rounded-pill">
+                                                @item.MenuItem.Name
+                                            </span>
                                         </div>
-                                        <div>
-                                            @Html.DropDownList("SelectedSize", 
-                                                new SelectList(ViewBag.Sizes as IEnumerable<Size>, "SizeId", "Name",@item!.SelectedSize.Size.SizeId),
-                                                "اختر حجمًا",
-                                                new { @class = "form-select" })
-                                        </div>
-                        
-                                        <div class="row">   
-                                            <h2>Add</h2>
-                                            @foreach (var (Subitem, Subindex) in item.AddedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
+                                        
+                                        <div class="card-body">
+                                            <input type="hidden" name="OrderItems[@index].OrderItemId" value="@item.OrderItemId" />
+                                            <input type="hidden" name="OrderItems[@index].MenuItemId" value="@item.MenuItemId" />
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">الكمية</label>
+                                                <div class="input-group">
+                                                    <button type="button" class="btn btn-outline-secondary quantity-decrease">
+                                                        <i class="bi bi-dash"></i>
+                                                    </button>
+                                                    <input type="number" name="OrderItems[@index].Quantity" class="form-control text-center" 
+                                                           value="@item.Quantity" min="1" required>
+                                                    <button type="button" class="btn btn-outline-secondary quantity-increase">
+                                                        <i class="bi bi-plus"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div class="mb-3">
+                                                <label class="form-label fw-bold">الحجم</label>
+                                                <select class="form-select text-center" name="OrderItems[@index].SelectedSizeId">
+                                                    @foreach (var size in item.ListSelectedSize)
+                                                    {
+                                                        if (item.SelectedSizeId == size.MenuItemSizeId)
+                                                        {
+                                                            <option value="@size.MenuItemSizeId" selected>
+                                                                @size!.Size!.Name (@size.PriceAdjustment )
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@size.MenuItemSizeId">
+                                                                @size!.Size!.Name (@size.PriceAdjustment )
+                                                            </option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+
+                                            @if (item.AddedAddOns != null && item.AddedAddOns.Any())
                                             {
-                                                <div class="col-md-3"> 
+                                                <div class="mb-3">
+                                                    <h6 class="fw-bold text-success">
+                                                        <i class="bi bi-plus-circle me-1"></i>الإضافات
+                                                    </h6>
+                                                    <div class="row g-2 mt-2">
+                                                        @foreach (var (addOn, addOnIndex) in item.AddedAddOns.Select((a, i) => (a, i)))
+                                                        {
+                                                            <div class="col-md-6">
+                                                                <div class="border rounded p-2 bg-light">
+                                                                    <input type="hidden" name="OrderItems[@index].AddedAddOns[@addOnIndex].AddOnId" value="@addOn.AddOnIngredientId" />
+                                                                    <div class="d-flex justify-content-between">
+                                                                        <span>@addOn.AddOnIngredient!.Name</span>
+                                                                        <span class="badge bg-success">+@addOn.AddOnIngredient.MenuItemIngredient.ExtraPrice </span>
+                                                                    </div>
+                                                                    @if (!string.IsNullOrEmpty(addOn.Note)) 
+                                                                    {
+                                                                        <small class="text-muted d-block mt-1">ملاحظة: @addOn.Note</small>
+                                                                        <input type="hidden" name="OrderItems[@index].AddedAddOns[@addOnIndex].Note" value="@addOn.Note" />
+                                                                    }
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            }
 
-                                                @* 
-                                                    @Subitem.AddOnIngredient.AddId
-                                                    @Subitem.AddOnIngredient.AddOnIngredientId 
-                                                *@
-                                                Name :  @Subitem.AddOnIngredient.Name (@Subitem.AddOnIngredient.AdditionalPrice)
-                                                
-                                                @Subitem.Note
-
+                                            @if (item.RemovedAddOns != null && item.RemovedAddOns.Any())
+                                            {
+                                                <div class="mb-3">
+                                                    <h6 class="fw-bold text-danger">
+                                                        <i class="bi bi-dash-circle me-1"></i>المكونات المحذوفة
+                                                    </h6>
+                                                    <div class="row g-2 mt-2">
+                                                        @foreach (var (removed, removedIndex) in item.RemovedAddOns.Select((r, i) => (r, i)))
+                                                        {
+                                                            <div class="col-md-6">
+                                                                <div class="border rounded p-2 bg-light">
+                                                                    <input type="hidden" name="OrderItems[@index].RemovedAddOns[@removedIndex].Id" value="@removed.RemoveOnIngredientId" />
+                                                                    <input type="hidden" name="OrderItems[@index].RemovedAddOns[@removedIndex].Name" value="@removed.Name" />
+                                                                    <span>@removed.Name</span>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    </div>
                                                 </div>
                                             }
                                         </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
 
-
-
-                                        <hr/>
-
-                                       <div>
-                                        <h2>Remove : </h2>
-                                        @foreach (var (Subitem, Subindex) in item.RemovedAddOns.Select((Subitem, Subindex) => (Subitem, Subindex)))
-                                        {
-                                            @*<p> OrderItemRemoveOnId : @Subitem.OrderItemRemoveOnId</p>
-                                            <p>RemoveOnIngredientId : @Subitem.RemoveOnIngredientId</p>*@
-                                            <p>Name : @Subitem.Name</p>
-                                        }
-                                       </div>
-
-                                        
-
+                        <div class="card mt-4 bg-light">
+                            <div class="card-body">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <h5 class="fw-bold mb-0">السعر الإجمالي: <span class="text-success">@Model.FullPrice </span></h5>
+                                    </div>
+                                    <div class="col-md-6 text-md-end">
+                                        <button type="button" class="btn btn-secondary me-2" onclick="history.back()">
+                                            <i class="bi bi-x-circle me-1"></i>إلغاء
+                                        </button>
+                                        <button type="submit" class="btn btn-success px-4">
+                                            <i class="bi bi-save me-1"></i>حفظ التعديلات
+                                        </button>
                                     </div>
                                 </div>
                             </div>
-
-
-                        }
-                        </div>
-
-                        <div class="row">
-                            <div class="col-md-6">
-                              Price :  @Model.FullPrice
-                            </div>
-                            <div class="col-md-6"></div>
-                        </div>
-                        
-                        
-                        <div class="text-center mt-5">
-                            <button type="submit" class="btn btn-success btn-lg px-5">
-                                <i class="bi bi-save me-2"></i>حفظ التعديلات
-                            </button>
                         </div>
                     </form>
                 </div>
@@ -120,3 +171,35 @@
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // زيادة الكمية
+            document.querySelectorAll('.quantity-increase').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    let input = this.parentNode.querySelector('input');
+                    input.value = (parseInt(input.value) || 0) + 1;
+                });
+            });
+            
+            // إنقاص الكمية
+            document.querySelectorAll('.quantity-decrease').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    let input = this.parentNode.querySelector('input');
+                    let value = parseInt(input.value) || 0;
+                    if (value > 1) {
+                        input.value = value - 1;
+                    }
+                });
+            });
+            
+            // تأكيد الحفظ
+            document.getElementById('orderEditForm').addEventListener('submit', function(e) {
+                if (!confirm('هل أنت متأكد من حفظ التعديلات؟')) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

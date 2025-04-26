@@ -26,76 +26,99 @@ namespace Menu.Controllers
 			_logger = logger;
 			_context = context;
 		}
-[		HttpGet("Index")] 
+		[HttpGet("Index")]
 		public IActionResult Index()
 		{
-			
+
 			return View();
 		}
-		
+
 		// GET: MenuItem/Create
 		[HttpGet]
 		public IActionResult Create()
 		{
 			ViewBag.Category = new SelectList(_context.Category, "CategoryId", "Name");
-						 
+
 			ViewBag.sizes = _context.Size!.ToList();
-			
+
 			ViewBag.Ingredient = _context.Ingredient!.ToList();
-			 			
+
 			return View();
 		}
-		
-	// استقبال البيانات من الفورم وإضافتها إلى قاعدة البيانات
-	[HttpPost]
-	[ValidateAntiForgeryToken]
-	public IActionResult Create(MenuItem menuItem, IFormFile imageFile)
-	{
-		// إعادة تحميل القوائم في حالة وجود أخطاء في النموذج
-		ViewBag.Category = new SelectList(_context.Category, "CategoryId", "Name");
-		ViewBag.sizes = _context.Size!.ToList();
-		ViewBag.Ingredient = _context.Ingredient!.ToList();
-		
-		 // رفع الصورة إذا تم اختيار ملف
-        if (imageFile != null && imageFile.Length > 0)
-        {
-            // إنشاء مسار لحفظ الصورة
-            var uploadsFolder = Path.Combine("wwwroot", "images", "menuItems");
-            if (!Directory.Exists(uploadsFolder))
-            {
-                Directory.CreateDirectory(uploadsFolder);
-            }
 
-            // إنشاء اسم فريد للملف
-            var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
-            var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+		// استقبال البيانات من الفورم وإضافتها إلى قاعدة البيانات
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Create(MenuItem menuItem, IFormFile imageFile)
+		{
+			// إعادة تحميل القوائم في حالة وجود أخطاء في النموذج
+			ViewBag.Category = new SelectList(_context.Category, "CategoryId", "Name");
+			ViewBag.sizes = _context.Size!.ToList();
+			ViewBag.Ingredient = _context.Ingredient!.ToList();
 
-            // حفظ الملف
-            using (var fileStream = new FileStream(filePath, FileMode.Create))
-            {
-                imageFile.CopyTo(fileStream);
-            }
-
-            // تعيين رابط الصورة في النموذج
-            menuItem.ImageUrl = "/images/menuItems/" + uniqueFileName;
-        }
-		
-			menuItem.SelectedSize.ToList().ForEach(e=>
+			// رفع الصورة إذا تم اختيار ملف
+			if (imageFile != null && imageFile.Length > 0)
 			{
-				if(e.SizeId > 0 )
+				// إنشاء مسار لحفظ الصورة
+				var uploadsFolder = Path.Combine("wwwroot", "images", "menuItems");
+				if (!Directory.Exists(uploadsFolder))
 				{
-					menuItem.MenuItemSize.Add(new MenuItemSize{
-						PriceAdjustment = e.ExtraPrice,
-						SizeId = e.SizeId
-					});
+					Directory.CreateDirectory(uploadsFolder);
 				}
-			});
-	
-	
-	
-			menuItem.SelectedIngredients.ToList().ForEach(e=>
+
+				// إنشاء اسم فريد للملف
+				var uniqueFileName = Guid.NewGuid().ToString() + "_" + imageFile.FileName;
+				var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+				// حفظ الملف
+				using (var fileStream = new FileStream(filePath, FileMode.Create))
+				{
+					imageFile.CopyTo(fileStream);
+				}
+
+				// تعيين رابط الصورة في النموذج
+				menuItem.ImageUrl = "/images/menuItems/" + uniqueFileName;
+			}
+
+			/*menuItem.SelectedSize.ToList().ForEach(e =>
 			{
-				if(e.IngredientId > 0 )
+				if (e.SizeId > 0)
+				{
+					menuItem.MenuItemSize.Add(
+						new MenuItemSize
+						{
+							PriceAdjustment = e.ExtraPrice,
+							SizeId = e.SizeId
+						});
+				}
+			});*/
+
+			List<MenuItemSize> tempMIS = new  List<MenuItemSize>();
+
+			foreach (var e in menuItem.SelectedSize)
+			{
+				if (e.SizeId != null)
+				{
+					tempMIS.Add(
+						new MenuItemSize
+						{
+							PriceAdjustment = e.ExtraPrice,
+							SizeId = e.SizeId,
+						});
+				}
+				else
+				{
+					Console.WriteLine("Warning: Encountered a null Size object.");
+				}
+			}
+
+			menuItem.MenuItemSize  = tempMIS;
+
+
+
+			menuItem.SelectedIngredients.ToList().ForEach(e =>
+			{
+				if (e.IngredientId > 0)
 				{
 					menuItem.MenuItemIngredients.Add(
 						new MenuItemIngredient
@@ -105,18 +128,20 @@ namespace Menu.Controllers
 							AdditionalStatus = e.AdditionalStatus,
 							PrimaryStatus = e.PrimaryStatus,
 							SubStatus = e.SubStatus,
-							
+
 						}
 					);
 				}
 			});
-				
-		_context!.MenuItem!.Add(menuItem);
-		_context.SaveChanges();
-			
-		return View();
-		 
-	}
+
+
+
+			_context!.MenuItem!.Add(menuItem);
+			_context.SaveChanges();
+
+			return View();
+
+		}
 
 		[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
 		public IActionResult Error()
