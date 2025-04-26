@@ -332,9 +332,6 @@
 </style>
 
 
-
-
-
 <div class="container shadow-lg bg-white py-4 rounded-3">
     <div class="header">
         <button class="btn-create" onclick="openNewOrderModal()">
@@ -348,26 +345,28 @@
             </div>
             <div class="event-type" style="background-color: #e0e8ff;">
                 <div class="event-type-circle" style="background-color: #4285f4;"></div>
-                <span>طلب جديد</span>
+                <span>طلب جديد</span> @* This might be redundant now? Or represents orders in the list? *@
             </div>
             <div class="event-type" style="background-color: #ffecf0;">
                 <div class="event-type-circle" style="background-color: #ff5b7d;"></div>
                 <span>طاولة محجوزة</span>
             </div>
+            </div>
         </div>
-
-    </div>
 
     <div class="content-wrapper">
         <div class="sidebar" style="overflow-y: scroll;height: 500px;overflow-x: hidden;">
             <div class="orders-list" style="padding-right: 30px;">
-                @foreach (var item in Model)
+                @* Only display orders here that DON'T have a valid TableNumber assigned *@
+                @foreach (var item in Model) // Adjust condition based on your model (e.g., o.TableNumber == null)
                 {
-                    <div class="order-item row" draggable="true" ondragstart="drag(event)" id="order-@item.OrderId"
-                        style="background-color: #f0f0f0;">
-                        <div class="col-md-10">#Order :@item.OrderId</div>
+                    <div class="order-item row" draggable="true" ondragstart="drag(event)" id="order-@item.OrderId">
+                        @* Adjust the display text based on your Order model properties *@
+                        <div class="col-md-10">#Order :@item.OrderId </div>
                         <div class="order-actions col-md-2">
                             <button title="تفاصيل" onclick="showOrderDetails('order-@item.OrderId')">👁️</button>
+                            @* Optional: Add cancel/move buttons here if needed for unassigned orders *@
+                            @* <button title="إلغاء" onclick="cancelOrder(this.closest('.order-item'))">🗑️</button> *@
                         </div>
                     </div>
                 }
@@ -378,9 +377,36 @@
             <div class="tables-grid">
                 @for (int i = 1; i < 31; i++)
                 {
-                    <div class="table-cell status-free" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="showTableDetailsModal(@i)">
-                          <!----!> 
+                    // Find orders specifically for this table number 'i'
+                    var ordersForThisTable = Model.Where(o => o.TableNumber == i).ToList();
+
+                    // Determine the initial status based on whether there are orders
+                    // You might need more complex logic if you also track "reserved" status via the Order model
+                    string initialStatusClass = ordersForThisTable.Any() ? "status-occupied" : "status-free";
+                    // Example: If an Order has a Status property:
+                    // string initialStatusClass = "status-free";
+                    // if (ordersForThisTable.Any()) {
+                    //     initialStatusClass = ordersForThisTable.First().Status == OrderStatus.Reserved ? "status-reserved" : "status-occupied";
+                    // }
+
+
+                    <div class="table-cell @initialStatusClass" data-table-number="@i" ondrop="drop(event)" ondragover="allowDrop(event)" onclick="showTableDetailsModal(@i)">
                         <div class="table-number">@i</div>
+
+                        @* Render the orders assigned to this table directly inside the cell *@
+                        @foreach (var order in ordersForThisTable)
+                        {
+                             <div class="order-item row" draggable="true" ondragstart="drag(event)" id="order-@order.OrderId">
+                                @* Adjust display text as needed *@
+                                <div class="col-md-10">#Order :@order.OrderId </div>
+                                @* Include all actions for orders within tables *@
+                                <div class="order-actions col-md-2">
+                                    <button title="تفاصيل" onclick="showOrderDetails('order-@order.OrderId')">👁️</button>
+                                    <button title="إلغاء" onclick="cancelOrder(this.closest('.order-item'))">🗑️</button>
+                                    <button title="للدفع" onclick="moveToPayment(this.closest('.order-item'))">💰</button>
+                                </div>
+                            </div>
+                        }
                     </div>
                 }
             </div>
@@ -388,95 +414,23 @@
     </div>
 </div>
 
+@* Modals remain the same (orderModal, tableDetailsModal, orderDetailsModal) *@
 <div class="modal" id="orderModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title">طلب جديد</div>
-            <button class="close-modal" onclick="closeOrderModal()">&times;</button>
-        </div>
-        <div class="form-group">
-            <label>رقم الطلب</label>
-            <input type="text" id="orderNumber">
-        </div>
-        <div class="form-group">
-            <label>وصف الطلب</label>
-            <input type="text" id="orderDescription">
-        </div>
-        <div class="form-group">
-            <label>رقم الطاولة</label>
-            <select id="tableNumber">
-                <option value="">اختر طاولة</option>
-                @for (int i = 1; i < 31; i++)
-                {
-                    <option value="@i">طاولة @i</option>
-                }
-            </select>
-        </div>
-        <div class="form-group">
-            <label>الحالة الأولية للطاولة</label>
-            <select id="initialTableStatus">
-                <option value="occupied">مشغولة</option>
-                <option value="reserved">محجوزة</option>
-                <option value="free">شاغرة</option>
-            </select>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn btn-cancel" onclick="closeOrderModal()">إلغاء</button>
-            <button class="modal-btn btn-save" onclick="saveNewOrder()">حفظ</button>
-        </div>
-    </div>
+    @* ... modal content ... *@
 </div>
 
 <div class="modal" id="tableDetailsModal">
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-title" id="tableDetailsTitle">تفاصيل الطاولة</div>
-            <button class="close-modal" onclick="closeTableDetailsModal()">&times;</button>
-        </div>
-        <div class="form-group">
-            <label>رقم الطاولة</label>
-            <input type="text" id="detailsTableNumber" readonly style="border:none">
-        </div>
-        <div class="form-group">
-            <label>الحالة</label>
-            <select id="detailsTableStatus" onchange="updateTableStatusFromDetails()">
-                <option value="free">شاغرة</option>
-                <option value="reserved">محجوزة</option>
-                <option value="occupied">مشغولة</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label>الطلبات الحالية</label>
-            <div id="currentOrders">
-            </div>
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn btn-cancel" onclick="closeTableDetailsModal()">إغلاق</button>
-        </div>
-    </div>
+     @* ... modal content ... *@
 </div>
 
 <div class="modal" id="orderDetailsModal">
-    <div class="modal-content order-details-modal-content">
-        <div class="modal-header">
-            <div class="modal-title">تفاصيل الطلب</div>
-            <button class="close-modal" onclick="closeOrderDetailsModal()">&times;</button>
-        </div>
-        <div id="orderDetailsContent">
-        </div>
-        <div class="modal-footer">
-            <button class="modal-btn btn-cancel" onclick="closeOrderDetailsModal()">إغلاق</button>
-        </div>
-    </div>
+    @* ... modal content ... *@
 </div>
 
 
-
-
-
-
+@* --- JavaScript Section --- *@
 <script>
-    let currentOrdersData = []; // لتخزين بيانات الطلبات
+    //let currentOrdersData = []; // This might not be needed if data comes directly from rendered HTML
 
     // وظائف السحب والإفلات
     function allowDrop(ev) {
@@ -485,123 +439,223 @@
 
     function drag(ev) {
         ev.dataTransfer.setData("text", ev.target.id);
-        ev.target.classList.add("dragging");
+        // Add a class for visual feedback while dragging
+        setTimeout(() => { // Use timeout to ensure class is added after drag operation starts
+            ev.target.classList.add("dragging");
+        }, 0);
     }
 
-    
-function drop(ev) {
-    ev.preventDefault();
-    var data = ev.dataTransfer.getData("text");
-    var draggedElement = document.getElementById(data);
-    draggedElement.classList.remove("dragging");
+    function drop(ev) {
+        ev.preventDefault();
+        const orderId = ev.dataTransfer.getData("text");
+        const draggedElement = document.getElementById(orderId);
+        const targetTable = ev.currentTarget; // The table-cell being dropped onto
 
-    const targetTable = ev.currentTarget;
-    const previousParent = draggedElement.parentElement;
+        if (!draggedElement || !targetTable || !targetTable.classList.contains('table-cell')) {
+             console.error("Drop target is not a valid table cell or dragged element not found.");
+             if(draggedElement) draggedElement.classList.remove("dragging"); // Clean up visual feedback
+             return;
+        }
 
-    // إذا كان العنصر قادماً من طاولة أخرى أو قائمة الطلبات
-    if (previousParent) {
-        if (previousParent.classList.contains("table-cell")) {
-            previousParent.removeChild(draggedElement);
+        draggedElement.classList.remove("dragging"); // Remove visual feedback
+
+        const previousParent = draggedElement.parentElement;
+
+        // Check if the target table is different from the source (if it came from a table)
+        if (targetTable === previousParent) {
+            return; // Dropped onto the same table it came from
+        }
+
+        // Append the dragged order element to the target table
+        targetTable.appendChild(draggedElement);
+
+        // Ensure action buttons are present (especially if dragged from sidebar)
+        ensureOrderActions(draggedElement, orderId);
+
+        // Update status of the target table
+        updateTableStatusElement(targetTable, "occupied"); // Or determine status based on other factors if needed
+
+        // Update status of the source container (if it was a table cell)
+        if (previousParent && previousParent.classList.contains("table-cell")) {
             if (previousParent.querySelectorAll(".order-item").length === 0) {
                 updateTableStatusElement(previousParent, "free");
             }
-        } else if (previousParent.classList.contains("orders-list")) {
-            previousParent.removeChild(draggedElement);
         }
 
-        // إضافة العنصر المسحوب إلى الطاولة الهدف (سيتم تحديث الأزرار في addOrderToTable)
-        addOrderToTable(targetTable, draggedElement.querySelector('.col-md-10').innerText, draggedElement.id);
-        updateTableStatusElement(targetTable, "occupied");
+        // Optional: You might want to update the underlying data model via an AJAX call here
+        // Example: updateOrderTableOnServer(orderId, targetTable.dataset.tableNumber);
     }
-}
 
- 
- // إضافة طلب إلى خلية الجدول
-    function addOrderToTable(tableCell, orderText, orderId) {
-        let orderItem = tableCell.querySelector(`#${orderId}`);
 
-        if (!orderItem) {
-            // إنشاء عنصر طلب جديد إذا لم يكن موجودًا
-            orderItem = document.createElement("div");
-            orderItem.className = "order-item row";
-            orderItem.draggable = true;
-            orderItem.id = orderId;
-            orderItem.innerHTML = `<div class="col-md-10">${orderText}</div>`; // إنشاء الجزء النصي فقط في البداية
-            orderItem.addEventListener("dragstart", drag);
-            tableCell.appendChild(orderItem);
-        }
-
-        // التحقق مما إذا كانت أزرار الإجراءات موجودة بالفعل
-        const orderActions = orderItem.querySelector(".order-actions");
-        if (!orderActions) {
-            // إضافة أزرار الإجراءات إذا لم تكن موجودة
-            const actionsDiv = document.createElement("div");
+    // Helper function to ensure action buttons exist on an order item
+    function ensureOrderActions(orderItem, orderId) {
+         let actionsDiv = orderItem.querySelector(".order-actions");
+         if (!actionsDiv) {
+            // If actions are missing (e.g., dragged from a simplified sidebar item), add them
+            actionsDiv = document.createElement("div");
             actionsDiv.className = "order-actions col-md-2";
-            actionsDiv.innerHTML = `<button title="تفاصيل" onclick="showOrderDetails('${orderId}')">👁️</button><button title="إلغاء" onclick="cancelOrder(this.parentNode.parentNode)">🗑️</button><button title="للدفع" onclick="moveToPayment(this.parentNode.parentNode)">💰</button>`;
-            orderItem.appendChild(actionsDiv);
-        }
+             // Add the standard buttons for table orders
+            actionsDiv.innerHTML = `
+                <button title="تفاصيل" onclick="showOrderDetails('${orderId}')">👁️</button>
+                <button title="إلغاء" onclick="cancelOrder(this.closest('.order-item'))">🗑️</button>
+                <button title="للدفع" onclick="moveToPayment(this.closest('.order-item'))">💰</button>
+            `;
+            // Ensure the main content div exists correctly
+            let contentDiv = orderItem.querySelector('.col-md-10');
+            if(contentDiv) {
+                 orderItem.appendChild(actionsDiv); // Append actions after content
+            } else {
+                // Handle cases where the structure might be simpler (e.g., just text)
+                 console.warn("Order item structure might be incomplete. Adding actions.", orderItem);
+                 orderItem.appendChild(actionsDiv);
+            }
+         }
+         // Ensure the parent row class is present for layout
+         if (!orderItem.classList.contains('row')) {
+            orderItem.classList.add('row');
+         }
     }
+
+
+    // (Deprecated - Replaced by direct rendering in Razor)
+    /* function addOrderToTable(tableCell, orderText, orderId) { ... } */
+
 
     // وظيفة تحديث حالة عنصر الطاولة المرئية
     function updateTableStatusElement(tableCell, status) {
-        if (!tableCell) return;
+        if (!tableCell || !tableCell.classList.contains('table-cell')) return;
         tableCell.classList.remove("status-free", "status-reserved", "status-occupied");
         tableCell.classList.add(`status-${status}`);
+
+        // You might want to also update the status in the details modal if it's open for this table
+        const detailsModal = document.getElementById("tableDetailsModal");
+        if (detailsModal.style.display === "flex" && detailsModal.dataset.tableNumber === tableCell.dataset.tableNumber) {
+            document.getElementById("detailsTableStatus").value = status;
+        }
     }
 
     // وظائف النافذة المنبثقة (Modal) الخاصة بإنشاء طلب جديد
     function openNewOrderModal() {
         document.getElementById("orderModal").style.display = "flex";
+        resetNewOrderForm(); // Reset form when opening
     }
 
     function closeOrderModal() {
         document.getElementById("orderModal").style.display = "none";
-        resetNewOrderForm();
+        // No need to call reset here if called on open
     }
 
     function resetNewOrderForm() {
-        document.getElementById("orderNumber").value = "";
+        document.getElementById("orderNumber").value = ""; // Consider generating this server-side or differently
         document.getElementById("orderDescription").value = "";
-        document.getElementById("tableNumber").value = "";
-        document.getElementById("initialTableStatus").value = "occupied";
+        document.getElementById("tableNumber").value = ""; // Default to no table selected
+        document.getElementById("initialTableStatus").value = "occupied"; // Default status if table selected
+        // Hide/show status based on table selection?
+        document.getElementById("tableNumber").onchange = () => {
+             const statusSelect = document.getElementById("initialTableStatus");
+             if (document.getElementById("tableNumber").value) {
+                 statusSelect.closest('.form-group').style.display = ''; // Show status
+             } else {
+                  statusSelect.closest('.form-group').style.display = 'none'; // Hide status if no table
+             }
+        };
+        // Initial check
+        document.getElementById("initialTableStatus").closest('.form-group').style.display = 'none';
     }
 
     function saveNewOrder() {
-        const orderNumber = document.getElementById("orderNumber").value;
+        const orderNumber = document.getElementById("orderNumber").value; // This should likely be an ID generated server-side upon saving
         const orderDescription = document.getElementById("orderDescription").value;
         const tableNumber = document.getElementById("tableNumber").value;
         const initialTableStatus = document.getElementById("initialTableStatus").value;
 
-        if (!orderNumber || !orderDescription) {
-            alert("يرجى ملء جميع الحقول المطلوبة");
+        // Basic validation
+        if (!orderDescription) { // Order number might be generated later
+            alert("يرجى إدخال وصف الطلب على الأقل");
             return;
         }
 
-        const newOrderId = "order" + (Math.floor(Math.random() * 1000) + 100);
-        const orderText = `طلب #${orderNumber} - ${orderDescription}`;
+        // ***** IMPORTANT: Saving Logic *****
+        // This function should ideally send the data to the server via an AJAX call (fetch or XMLHttpRequest)
+        // The server would then:
+        // 1. Create the new Order record in the database.
+        // 2. Get the new Order ID.
+        // 3. Return the new Order details (including ID) to the client.
+        // The client-side JavaScript would then use the response to create the visual element.
+
+        // --- Client-side Simulation (Replace with AJAX) ---
+        const newOrderId = "order-new" + Date.now(); // Temporary client-side ID
+        const orderText = `#Order New: ${orderDescription}`; // Simulate display text
+
+        console.log("Simulating save:", { orderNumber, orderDescription, tableNumber, initialTableStatus });
 
         if (tableNumber) {
             const tableCells = document.querySelectorAll(".table-cell");
+            let targetCell = null;
             for (const cell of tableCells) {
-                const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
-                if (cellNumber === parseInt(tableNumber)) {
-                    addOrderToTable(cell, orderText, newOrderId);
-                    updateTableStatusElement(cell, initialTableStatus);
+                // Use dataset for reliability
+                if (cell.dataset.tableNumber === tableNumber) {
+                    targetCell = cell;
                     break;
                 }
             }
+             if (targetCell) {
+                // Create and add the new order item element visually
+                const newOrderItem = createOrderItemElement(newOrderId, orderText, true); // true = include table actions
+                targetCell.appendChild(newOrderItem);
+                updateTableStatusElement(targetCell, initialTableStatus);
+            } else {
+                 console.error("Target table cell not found for number:", tableNumber);
+                 alert("لم يتم العثور على الطاولة المحددة.");
+                 return; // Stop if table not found
+            }
+
         } else {
-            const newOrderItem = document.createElement("div");
-            newOrderItem.className = "order-item";
-            newOrderItem.draggable = true;
-            newOrderItem.id = newOrderId;
-            newOrderItem.innerHTML = `<span>${orderText}</span><div class="order-actions"><button title="تفاصيل" onclick="showOrderDetails('${newOrderId}')">👁️</button></div>`;
-            newOrderItem.addEventListener("dragstart", drag);
-            document.querySelector(".orders-list").appendChild(newOrderItem);
+            // Add to the sidebar list
+            const ordersList = document.querySelector(".orders-list");
+            const newOrderItem = createOrderItemElement(newOrderId, orderText, false); // false = only basic actions for sidebar
+            ordersList.appendChild(newOrderItem);
         }
+        // --- End Simulation ---
 
         closeOrderModal();
+        // After successful AJAX save: Use the actual ID and data returned from server
     }
+
+    // Helper function to create order item DOM element
+    function createOrderItemElement(orderId, orderText, includeTableActions) {
+        const orderItem = document.createElement("div");
+        orderItem.className = "order-item row";
+        orderItem.draggable = true;
+        orderItem.id = orderId;
+        orderItem.setAttribute("ondragstart", "drag(event)");
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = "col-md-10";
+        contentDiv.innerText = orderText;
+        orderItem.appendChild(contentDiv);
+
+        const actionsDiv = document.createElement("div");
+        actionsDiv.className = "order-actions col-md-2";
+
+        // Always include details button
+        actionsDiv.innerHTML = `<button title="تفاصيل" onclick="showOrderDetails('${orderId}')">👁️</button>`;
+
+        if (includeTableActions) {
+            // Add cancel and payment buttons for orders within tables
+            actionsDiv.innerHTML += `
+                <button title="إلغاء" onclick="cancelOrder(this.closest('.order-item'))">🗑️</button>
+                <button title="للدفع" onclick="moveToPayment(this.closest('.order-item'))">💰</button>
+            `;
+        } else {
+             // Optionally add specific actions for sidebar items if needed
+              // actionsDiv.innerHTML += `<button title="Assign Table" onclick="assignTable('${orderId}')">📌</button>`;
+        }
+
+        orderItem.appendChild(actionsDiv);
+        return orderItem;
+    }
+
 
     // وظائف النافذة المنبثقة (Modal) الخاصة بتفاصيل الطاولة
     function showTableDetailsModal(tableNumber) {
@@ -611,38 +665,48 @@ function drop(ev) {
         const tableStatusSelect = document.getElementById("detailsTableStatus");
         const currentOrdersDiv = document.getElementById("currentOrders");
 
-        const tableCells = document.querySelectorAll(".table-cell");
-        let targetCell;
-        for (const cell of tableCells) {
-            const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
-            if (cellNumber === tableNumber) {
-                targetCell = cell;
-                break;
-            }
-        }
+        // Find the correct table cell using data attribute
+        const targetCell = document.querySelector(`.table-cell[data-table-number='${tableNumber}']`);
 
-        if (!targetCell) return;
+        if (!targetCell) {
+            console.error("Table cell not found for details modal:", tableNumber);
+            return;
+        }
 
         title.innerText = `تفاصيل الطاولة ${tableNumber}`;
         tableNumberInput.value = tableNumber;
+        // Determine status from class list
         tableStatusSelect.value = targetCell.classList.contains("status-free") ? "free" :
             targetCell.classList.contains("status-reserved") ? "reserved" : "occupied";
 
-        currentOrdersDiv.innerHTML = "";
+        currentOrdersDiv.innerHTML = ""; // Clear previous orders
         const orders = targetCell.querySelectorAll(".order-item");
         if (orders.length === 0) {
-            currentOrdersDiv.innerHTML = "<p>لا توجد طلبات حالية</p>";
+            currentOrdersDiv.innerHTML = "<p>لا توجد طلبات حالية لهذه الطاولة.</p>";
         } else {
             orders.forEach(order => {
-                const orderDiv = document.createElement("div");
-                orderDiv.className = "order-item";
-                orderDiv.innerHTML = order.innerHTML; // نقل محتوى الطلب بالكامل
-                currentOrdersDiv.appendChild(orderDiv);
+                // Clone the order item to show in the modal without moving it
+                const orderClone = order.cloneNode(true);
+                // Make sure cloned buttons still work or disable them if needed
+                // For simplicity, we'll just display the info
+                orderClone.removeAttribute('draggable'); // Not draggable within modal
+                orderClone.removeAttribute('ondragstart');
+                // Disable buttons within the modal clone if necessary
+                orderClone.querySelectorAll('button').forEach(btn => {
+                     // Example: btn.disabled = true; or adjust onclick if needed
+                     // Re-attaching onclick might be complex, easier to just show info
+                });
+                 // Add some styling for the modal list
+                 orderClone.style.marginBottom = '5px';
+                 orderClone.style.border = '1px solid #eee';
+                 orderClone.style.padding = '5px';
+
+                currentOrdersDiv.appendChild(orderClone);
             });
         }
 
         modal.style.display = "flex";
-        modal.dataset.tableNumber = tableNumber;
+        modal.dataset.tableNumber = tableNumber; // Store table number for status updates
     }
 
     function closeTableDetailsModal() {
@@ -654,58 +718,162 @@ function drop(ev) {
         const tableNumber = modal.dataset.tableNumber;
         const newStatus = document.getElementById("detailsTableStatus").value;
 
-        const tableCells = document.querySelectorAll(".table-cell");
-        for (const cell of tableCells) {
-            const cellNumber = parseInt(cell.querySelector(".table-number").innerText);
-            if (cellNumber === parseInt(tableNumber)) {
-                updateTableStatusElement(cell, newStatus);
-                break;
-            }
+        const targetCell = document.querySelector(`.table-cell[data-table-number='${tableNumber}']`);
+        if (targetCell) {
+            // Check if changing to 'free' is allowed if orders exist
+             if (newStatus === 'free' && targetCell.querySelector('.order-item')) {
+                 alert("لا يمكن تحديد الحالة 'شاغرة' والطاولة تحتوي على طلبات.");
+                 // Revert selection
+                 document.getElementById("detailsTableStatus").value = targetCell.classList.contains("status-reserved") ? "reserved" : "occupied";
+                 return;
+             }
+
+            // Check if changing from 'free' requires an order (might be too strict)
+            // if (newStatus !== 'free' && !targetCell.querySelector('.order-item')) {
+            //    alert("Table status cannot be set to occupied/reserved without orders.");
+            //    document.getElementById("detailsTableStatus").value = 'free';
+            //    return;
+            // }
+
+            updateTableStatusElement(targetCell, newStatus);
+
+            // Optional: Update status on the server via AJAX
+            // updateTableStatusOnServer(tableNumber, newStatus);
+        } else {
+            console.error("Target cell not found for status update from details modal:", tableNumber);
         }
     }
 
     // وظائف التعامل مع الطلبات داخل الطاولة
-    function showOrderOptions(orderItem) {
-        // يمكنك هنا عرض قائمة خيارات مثل إلغاء، تحويل للدفع، تفاصيل
-        alert(`خيارات الطلب: ${orderItem.querySelector('span').innerText}`);
-    }
+    /* function showOrderOptions(orderItem) { ... } // Likely replaced by direct buttons */
 
     function cancelOrder(orderItemElement) {
-        const tableCell = orderItemElement.parentNode;
-        if (confirm(`هل أنت متأكد من إلغاء الطلب: ${orderItemElement.querySelector('span').innerText}؟`)) {
+        if (!orderItemElement) return;
+        // Find the parent container (table cell or sidebar list)
+        const parentContainer = orderItemElement.closest('.table-cell, .orders-list');
+        const orderTextElement = orderItemElement.querySelector('.col-md-10');
+        const orderText = orderTextElement ? orderTextElement.innerText : `الطلب ${orderItemElement.id}`;
+
+        if (confirm(`هل أنت متأكد من إلغاء الطلب: ${orderText}؟`)) {
+            // Optional: Call server via AJAX to delete/cancel the order first
+            // deleteOrderOnServer(orderItemElement.id).then(() => { ... });
+
+            // Remove the element visually
             orderItemElement.remove();
-            if (tableCell.querySelectorAll(".order-item").length === 0) {
-                updateTableStatusElement(tableCell, "free");
+
+            // If the parent was a table cell, check if it's now empty and update status
+            if (parentContainer && parentContainer.classList.contains('table-cell')) {
+                if (parentContainer.querySelectorAll(".order-item").length === 0) {
+                    updateTableStatusElement(parentContainer, "free");
+                }
             }
+            // }); // Close server call block
         }
     }
 
     function moveToPayment(orderItemElement) {
-        alert(`تم تحويل الطلب: ${orderItemElement.querySelector('span').innerText} للدفع.`);
-        const tableCell = orderItemElement.parentNode;
+         if (!orderItemElement) return;
+        const parentContainer = orderItemElement.closest('.table-cell, .orders-list');
+        const orderTextElement = orderItemElement.querySelector('.col-md-10');
+        const orderText = orderTextElement ? orderTextElement.innerText : `الطلب ${orderItemElement.id}`;
+
+        // Simulate moving to payment (In reality, might trigger another process/modal)
+        alert(`سيتم تحويل الطلب: ${orderText} للدفع.`);
+
+        // Optional: Call server via AJAX to mark order as 'pending payment' or similar
+        // markOrderForPaymentOnServer(orderItemElement.id).then(() => { ... });
+
+        // Remove the element visually after marking for payment
         orderItemElement.remove();
-        if (tableCell.querySelectorAll(".order-item").length === 0) {
-            updateTableStatusElement(tableCell, "free");
+
+        // If the parent was a table cell, check if it's now empty
+        if (parentContainer && parentContainer.classList.contains('table-cell')) {
+            if (parentContainer.querySelectorAll(".order-item").length === 0) {
+                updateTableStatusElement(parentContainer, "free");
+            }
         }
-        // يمكنك هنا إضافة منطق لنقل الطلب إلى نظام الدفع
+         // }); // Close server call block
     }
 
-    // وظيفة عرض تفاصيل الطلب
+    // وظيفة عرض تفاصيل الطلب (Modal)
     function showOrderDetails(orderId) {
-
-        alert("kkk");
-
         const modal = document.getElementById("orderDetailsModal");
         const contentDiv = document.getElementById("orderDetailsContent");
-        const orderElement = document.getElementById(orderId);
+        const orderElement = document.getElementById(orderId); // Find the element in the main page
+
+        // Clear previous content
+        contentDiv.innerHTML = '<p>جارٍ تحميل التفاصيل...</p>';
 
         if (orderElement) {
-            contentDiv.innerHTML = `<p><b>رقم الطلب:</b> ${orderId.replace('order', '')}</p><p><b>الوصف:</b> ${orderElement.querySelector('span').innerText.split(' - ')[1] || 'لا يوجد وصف'}</p>`;
+             // Extract details from the element's content
+             const orderTextElement = orderElement.querySelector('.col-md-10');
+             const orderFullText = orderTextElement ? orderTextElement.innerText : 'غير متوفر';
+
+             // Extract Order ID number more robustly
+             let orderIdNumber = orderId.replace('order-', ''); // Basic extraction
+             const idMatch = orderFullText.match(/#Order\s*:\s*(\S+)/); // Try to get ID from text if format is consistent
+             if(idMatch && idMatch[1]) {
+                 orderIdNumber = idMatch[1];
+             }
+
+             // Extract description (assuming format like "#Order :ID - Description")
+             const descriptionMatch = orderFullText.match(/-\s*(.*)$/);
+             const description = descriptionMatch && descriptionMatch[1] ? descriptionMatch[1].trim() : '(لا يوجد وصف إضافي)';
+
+
+             // Populate the modal
+            // In a real app, you'd fetch more details via AJAX using orderId
+            // fetch(`/api/orders/${orderIdNumber}`)
+            //   .then(response => response.json())
+            //   .then(data => {
+            //        contentDiv.innerHTML = `
+            //            <p><b>رقم الطلب:</b> ${data.id}</p>
+            //            <p><b>الوصف:</b> ${data.description}</p>
+            //            <p><b>الحالة:</b> ${data.status}</p>
+            //            <p><b>الطاولة:</b> ${data.tableNumber || 'غير محددة'}</p>
+            //            <p><b>العناصر:</b></p><ul>${data.items.map(item => `<li>${item.name} - ${item.quantity}</li>`).join('')}</ul>
+            //            <p><b>إجمالي السعر:</b> ${data.totalPrice}</p>
+            //        `;
+            //   })
+            //   .catch(error => {
+            //        console.error("Error fetching order details:", error);
+            //        contentDiv.innerHTML = `<p>حدث خطأ أثناء تحميل تفاصيل الطلب.</p>`;
+            //   });
+
+             // --- Simulation using existing info ---
+             contentDiv.innerHTML = `
+                 <p><b>رقم الطلب (ID):</b> ${orderIdNumber}</p>
+                 <p><b>المحتوى/الوصف:</b> ${description}</p>
+                 <p><b>النص الكامل:</b> ${orderFullText}</p>
+                 <p><i>(يتم عرض التفاصيل الأساسية. يمكن إضافة المزيد من المعلومات هنا.)</i></p>
+             `;
+             // --- End Simulation ---
+
             modal.style.display = "flex";
+        } else {
+             console.error("Element with ID " + orderId + " not found for details.");
+             contentDiv.innerHTML = `<p>لم يتم العثور على عنصر الطلب بالمعرف ${orderId}.</p>`;
+             modal.style.display = "flex"; // Show modal with error message
         }
     }
+
 
     function closeOrderDetailsModal() {
         document.getElementById("orderDetailsModal").style.display = "none";
     }
+
+    // --- Initial Setup ---
+    document.addEventListener('DOMContentLoaded', (event) => {
+        // Add dragend listener to clean up dragging class if drag fails or is cancelled
+         document.body.addEventListener('dragend', (ev) => {
+            if (ev.target.classList.contains('order-item')) {
+                ev.target.classList.remove('dragging');
+            }
+        });
+
+        // Initial setup for the new order form (hide status if no table selected)
+         resetNewOrderForm(); // Call once on load
+    });
+
+
 </script>

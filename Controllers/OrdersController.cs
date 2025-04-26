@@ -100,10 +100,7 @@ namespace Menu.Controllers
                 });
 
 
-                item!.AddedAddOns!.ForEach(x =>
-                {
-                    x.AddOnIngredient!.MenuItemIngredientId = x.AddOnIngredientId;
-                });
+                item!.AddedAddOns!.ForEach(x => { x.AddOnIngredient!.MenuItemIngredientId = x.AddOnIngredientId; });
 
             }
 
@@ -199,3 +196,4 @@ namespace Menu.Controllers
         }
     }
 }
+
